@@ -1,14 +1,24 @@
 import pygame as pg
-
+import os
 
 def main():
 
     return None
 
+def customfont(name,size):
+
+    path = os.path.dirname(os.path.abspath(name))
+    font = pg.font.Font(os.path.join(path,name), size)
+    return font
+
+def checkfonts():
+
+    print(pg.font.get_fonts())
+
 def inputtext():
+
     screen = pg.display.set_mode((640, 480))
-    pg.font.SysFont('Determination Mono',12)
-    font = pg.font.Font('Determination Mono', 32)
+    font = customfont('DeterminationMonoWeb.ttf',32)
     clock = pg.time.Clock()
     input_box = pg.Rect(100, 100, 140, 32)
     color_inactive = pg.Color('lightskyblue3')
@@ -55,7 +65,11 @@ def inputtext():
         pg.display.flip()
         clock.tick(30)
 
+
 if __name__ == '__main__':
+    # pg.font.init()
+    # customfont('DeterminationMonoWeb.ttf',12)
+    # checkfonts()
     pg.init()
     inputtext()
     pg.quit()
