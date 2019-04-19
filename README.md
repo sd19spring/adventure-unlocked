@@ -18,7 +18,7 @@ In order to run the game simply execute the following command:
 * [Chris Lee](https://github.com/clee4) - Music generation
 * [Manu Patil](https://github.com/mpatil99) - Game engine
 * [Colin Takeda](https://github.com/cstakeda) - Frontend visuals
-* [Richard Gao](https://github.com/hardlyrichie) - Generation
+* [Richard Gao](https://github.com/hardlyrichie) - World generation
 
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details
