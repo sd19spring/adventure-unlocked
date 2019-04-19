@@ -1,28 +1,70 @@
+"""
+Custom font implementation, text input, and text animation script in pygame
+"""
+
 import pygame as pg
 import os
 
-def main():
-
-    return None
-
 def customfont(name,size):
+    """Importing custom fonts into pygame"""
 
     path = os.path.dirname(os.path.abspath(name))
+    #print(type(path))
+    path = '/Users/colintakeda/final-project-adventure-unlocked/Fonts'
     font = pg.font.Font(os.path.join(path,name), size)
     return font
 
 def checkfonts():
+    """Checking font lists loaded in pygame"""
 
     print(pg.font.get_fonts())
 
-def inputtext():
+def commandwindow():
+    """Creating terminal interface for player"""
+
+    pg.font.init()
+    color = (0,0,255)
+    txtcolor = (0,0,0)
+    fontsize = 32
 
     screen = pg.display.set_mode((640, 480))
-    font = customfont('DeterminationMonoWeb.ttf',32)
+    clock = pg.time.Clock()
+    txt_output = pg.Rect((40 ,40),(500,200))
+    font = pg.font.SysFont(None, fontsize)
+
+    output = ["This","is","a","test."]
+    text = "TEST TEST TEST TEST TEST TEST TEST TEST TEST"
+
+    done = False
+    while not done:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                done = True
+
+        screen.fill((255, 0, 0))
+        txt_surface = font.render(text, True, txtcolor)
+        screen.blit(txt_surface, (txt_output.x+40, txt_output.y+40))
+        pg.draw.rect(screen, color, txt_output, 50)
+        pg.display.flip()
+
+def inputtext():
+    """Input text bubble that uses custom font choice"""
+
+    pg.font.init()
+    screen = pg.display.set_mode((640, 480))
+
+    try:
+        font = customfont('DeterminationMonoWeb.ttf',32)
+    except RuntimeError:
+        print("Still can't search in stream")
+        font = pg.font.SysFont(None, 32)
+
+
     clock = pg.time.Clock()
     input_box = pg.Rect(100, 100, 140, 32)
     color_inactive = pg.Color('lightskyblue3')
     color_active = pg.Color('dodgerblue2')
+
     color = color_inactive
     active = False
     text = ''
@@ -53,6 +95,7 @@ def inputtext():
 
         screen.fill((30, 30, 30))
         # Render the current text.
+
         txt_surface = font.render(text, True, color)
         # Resize the box if the text is too long.
         width = max(200, txt_surface.get_width()+10)
@@ -62,14 +105,12 @@ def inputtext():
         # Blit the input_box rect.
         pg.draw.rect(screen, color, input_box, 2)
 
-        pg.display.flip()
+        #pg.display.flip()
         clock.tick(30)
 
-
 if __name__ == '__main__':
-    # pg.font.init()
-    # customfont('DeterminationMonoWeb.ttf',12)
-    # checkfonts()
+
     pg.init()
-    inputtext()
+    #inputtext()
+    commandwindow()
     pg.quit()
