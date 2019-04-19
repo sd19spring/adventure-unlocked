@@ -1,14 +1,6 @@
----
-title: 'Adventure Unlocked'
----
-
 Adventure Unlocked
 ===
 A generative text based adventure game paired with generative music that analyzes tone to fit moods. 
-
-## Table of Contents
-
-[TOC]
 
 ## Getting started
 ### Installing
