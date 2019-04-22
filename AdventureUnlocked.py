@@ -92,7 +92,7 @@ class Player():
         str = "Items Currently in your Inventory ["
         for item in self.inventory:
             str += "    \n"+ item
-        str += "\n    ]
+        str += "\n    ]"
         return str
     def removeItem(self, item):
         self.inventory.remove(item)
@@ -106,7 +106,7 @@ class Player():
         str +="\n    ]"
         return str
     def updateActions(self, actions):
-
+        pass
 
 class Room():
     def __init__(self, name, rooms = None,inventory = None, actions = None):
@@ -134,48 +134,74 @@ class Room():
         return str
     def viewInventory(self):
         """ Displays current state of Inventory"""
-        str = "Items Currently in your Inventory ["
+        str = "Items in this room ["
         for item in self.inventory:
             str += "    \n"+ item
-        str += "\n    ]
+        str += "\n    ]"
         return str
     def removeItem(self, item):
         self.inventory.remove(item)
     def addItem(self, item):
         self.inventory.append(item)
-class Event():
-    def __init__(self, actions = None, events = None ):
-        if actions is None:
-            self.inventory = {}
-        if events is None:
-            self.events = []
+    def switchRoom(self, direction):
+        direction = direction.casefold()
+        if direction.find("up") > 0 or direction.find("north") > 0:
+            direction = 0
+        elif direction.find("left") > 0 or direction.find("east") > 0:
+            direction = 1
+        elif direction.find("down") > 0 or direction.find("south") > 0:
+            direction = 2
+        elif direction.find("right") > 0 or direction.find("west") > 0:
+            direction = 3
+        else:
+            return 0
+        return self.rooms[direction]
+# class Event():
+#     def __init__(self, actions = None, events = None ):
+#         if actions is None:
+#             self.inventory = {}
+#         if events is None:
+#             self.events = []
 class Game():
-    def __init__(self, events = None):
+    def __init__(self, rooms = None):
         self.player = Player()
-        if events is None:
-            events = {}
-        self.events = events
-        self.currentEvent = events["start"][0]
-    def getEvent(event):
-        self.event = events[event]
+        if rooms is None:
+            rooms = {}
+        self.rooms = rooms
+        self.currentRoom = rooms["1"]
+        #TODO setup up start room from JSON file
+
+    def switchRoom(self, direction):
+        if(self.currentRoom.switchRoom(direction)):
+            print(self.currentRoom.switchRoom(direction))
+            self.currentRoom = self.rooms[self.currentRoom.switchRoom(direction)]
+        else:
+            print("Not a valid Direction. Please try another command.")
 
 def load_game(game):
     with open('test.json', 'r') as file:
         data = file.read().replace('"', '\"')
 
     return json.loads(data)
+def load_rooms(roomsFile):
+    with open(roomsFile, 'r') as file:
+        data = file.read().replace('"', '\"')
+    roomsdata = json.loads(data)
+    rooms = {}
+    for room in roomsdata:
+        rooms[room] = Room(room,roomsdata[room]["Directions"], roomsdata[room]["Items"], None)
+    return rooms
 
 
 
 if __name__ == '__main__':
-    game = Game(load_game("test1.json"))
-    while game.events[game.currentEvent][0] != 0:
-        print(game.currentEvent)
-        print("\nYour chioces\n")
-        # print(len(game.events[game.currentEvent[0]]))
-        for i in range(len(game.events[game.currentEvent])):
-            # print(str(game.events[game.currentEvent]))
-            print("Type " + str(i) + " for " + str(game.events[game.currentEvent][i]))
-        choice = input("What is your decision")
-        game.currentEvent = game.events[game.currentEvent][int(choice)]
-    print("oops. You died. Sucker.")
+    print(load_rooms("rooms.json"))
+    game = Game(load_rooms("rooms.json"))
+    print("Welcome to Adventure Unlocked")
+    while True:
+        print("You are in: " + game.currentRoom.name)
+        choice = input("What do you do?")
+        if(choice.casefold().find("go")>=0):
+            game.switchRoom(choice)
+        else:
+            print("Sorry this action is not supported just yet")
