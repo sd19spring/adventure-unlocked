@@ -156,20 +156,14 @@ class Room():
         else:
             return 0
         return self.rooms[direction]
-# class Event():
-#     def __init__(self, actions = None, events = None ):
-#         if actions is None:
-#             self.inventory = {}
-#         if events is None:
-#             self.events = []
+
 class Game():
     def __init__(self, rooms = None):
         self.player = Player()
         if rooms is None:
             rooms = {}
         self.rooms = rooms
-        self.currentRoom = rooms["1"]
-        #TODO setup up start room from JSON file
+        self.currentRoom = rooms["1"] #TODO Start Room with Rich
 
     def switchRoom(self, direction):
         if(self.currentRoom.switchRoom(direction)):
@@ -178,11 +172,16 @@ class Game():
         else:
             print("Not a valid Direction. Please try another command.")
 
-def load_game(game):
-    with open('test.json', 'r') as file:
+def load_items(itemsFile):
+    with open(roomsFile, 'r') as file:
         data = file.read().replace('"', '\"')
-
+    itemsdata = json.loads(data)
+    items = {}
+    for item in itemsdata:
+        items[item] = Item(item,itemsdata[item]["Properties"], itemsdata[item]["Reactions"], None)
+    return items
     return json.loads(data)
+
 def load_rooms(roomsFile):
     with open(roomsFile, 'r') as file:
         data = file.read().replace('"', '\"')
@@ -203,5 +202,8 @@ if __name__ == '__main__':
         choice = input("What do you do?")
         if(choice.casefold().find("go")>=0):
             game.switchRoom(choice)
+        elif(choice.casefold().find("inventory")>=0):
+            game.player.viewInventory()
+            print(game.currentRoom.viewInventory())
         else:
             print("Sorry this action is not supported just yet")
