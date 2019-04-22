@@ -24,15 +24,14 @@ import random
 # with open("major-scale.mid", "wb") as output_file:
 #     MyMIDI.writeFile(output_file)
 
-def scales():
-    myfile = 'scales.txt'
+def scales(myfile='scales.txt'):
     
     if not os.path.isfile(myfile):
         scale_library = {'major' : (0,2,4,5,7,9,11,12),
                          'minor' : (0,2,3,4,7,8,10,12),}
 
         with open(myfile, "wb") as output_file:
-            pickle.dump(scale_library, myfile)
+            pickle.dump(scale_library, output_file)
     
     print("STATUS: SCALES COMPILED")
 
@@ -56,12 +55,12 @@ class Song:
         self.channel  = 0
         self.time     = 0       # In beats
         self.duration = 1       # In beats
-        self.tempo    = tempo   # In BPM
+        self.tempo = tempo      # In BPM
         # volume is from 0-127, as per the MIDI standard  
 
         self.MyMIDI = MIDIFile(1)  
 
-        self.MyMIDI.addTempo(track, time, tempo) 
+        self.MyMIDI.addTempo(self.track, self.time, self.tempo) 
 
     def export(self, file_name = "song"):
         """
@@ -70,10 +69,10 @@ class Song:
         with open(os.path.join(file_name,".mid"), "wb") as output_file:
             MyMIDI.writeFile(output_file)
     
-
 class Happy(Song):
     def __init__(self, key=60, tempo=0, degrees=0):
         # sets key range to three octaves
+        scales()
         if not degrees:
             with open('scales.txt', 'rb') as myfile:
                 scale = pickle.load(myfile)['major']
@@ -85,6 +84,25 @@ class Happy(Song):
 
         Song.__init__(self, degrees, tempo)
 
-    def note_probs(self):
+    # def note_probs(self):
+
+class Sad(Song):
+    def __init__(self, key=60, tempo=0, degrees=0):
+        # sets key range to three octaves
+        scales()
+        if not degrees:
+            with open('scales.txt', 'rb') as myfile:
+                scale = pickle.load(myfile)['minor']
+            
+            degrees = build_scale(scale, key)
         
+        if not tempo:
+            tempo = random.randint(100,120)
+
+        Song.__init__(self, degrees, tempo)
+
+    # def note_probs(self):
         
+if __name__ == "__main__":
+    test = Happy()
+    print(len(test.degrees))
