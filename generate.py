@@ -8,8 +8,11 @@ from world import ATTRIBUTES, OBJECT_TYPES, ITEMS, ROOMS
 
 def write_attributes():
     """
-    Writes attributes to file
+    Writes item attributes to file
     """
+    with open_w('content/attritubes.json') as f:
+        json.dump(ATTRIBUTES, f)
+
 
 def generate_items(n):
     """
@@ -26,9 +29,10 @@ def generate_items(n):
             attributes = []
             if p in OBJECT_TYPES.keys():
                 attributes += OBJECT_TYPES[p]
-            print(attributes)
-            for a in attributes:
-                items[item][a] = ATTRIBUTES[a]
+            elif p in ATTRIBUTES:
+                attributes.append(p)
+                
+            items[item] = attributes
 
     # Write items to a json file
     with open_w('content/items.json') as f:
@@ -76,5 +80,6 @@ def open_w(path):
     return open(path, 'w')
 
 if __name__ == "__main__":
+    write_attributes()
     generate_items(5)
     generate_rooms(3)

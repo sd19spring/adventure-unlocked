@@ -8,18 +8,18 @@ ATTRIBUTES = {
         "reactions": ["move to inventory", "move to placeable"]
     },
     "edible": {
-        "prompts": ["eat", "consume"],
+        "prompts": [["eat", "consume"]],
         "reactions": ["health increase"]
     },
     "openable": {
-        "prompts": ["open",  "open up"],
+        "prompts": [["open",  "open up"]],
         "reactions": ["state open"]
     },
     "withstand": { # Can have portable objects placed onto or into it
         "reactons": ["supports portable"]
     },
     "usable": {
-        "propmts": ["use"],
+        "propmts": [["use"]],
         "reactions": ["use _"]
     },
     "slippery": {
