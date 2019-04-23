@@ -36,7 +36,7 @@ class Song:
 
         self.degrees  = degrees
 
-        beats = [1/2,1/4,1/8,1/16,1/32]
+        beats = [2, 1, 1/2,1/4,1/8]
         self.beatprobs = []
         for i in range(len(beats)):
             self.beatprobs = self.beatprobs + ([beats[i]]*beatprobs[i]) 
@@ -96,14 +96,16 @@ class Song:
             self.MyMIDI.writeFile(output_file)
 
     def write_midi(self):
-        beats = self.beat_select(3)
+        beats = self.beat_select(100)
         notes = self.note_select(len(beats))
 
         self.MyMIDI.addTempo(self.track, self.time, self.tempo) 
 
+        curtime = 0
         for i in range(len(beats)):
+            curtime = curtime + beats[i]
             self.MyMIDI.addNote(self.track, self.channel, 
-                                notes[i], beats[i], self.duration, 100)
+                                notes[i], curtime, beats[i], 100)
 
         self.export()
 
