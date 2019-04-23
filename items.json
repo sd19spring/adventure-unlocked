@@ -1,0 +1,39 @@
+{
+    "Stuff": {
+        "Properites":["Pick up"],
+        "Reactions":["Stuff","Rich"]
+    },
+    "Rich": {
+        "Properites":["5", "2", "3", "2"],
+        "Reactions":["Stuff","Rich"]
+    },
+    "Chris": {
+        "Properites":["5", "2", "3", "2"],
+        "Reactions":["Stuff","Rich"]
+    },
+    "Julia": {
+        "Properites":["5", "2", "3", "2"],
+        "Reactions":["Stuff","Rich"]
+    },
+    "Honest": {
+        "Properites":["5", "2", "3", "2"],
+        "Reactions":["Stuff","Rich"]
+    },
+    "Rho": {
+        "Properites":["5", "2", "3", "2"],
+        "Reactions":["Stuff","Rich"]
+    },
+    "Colin": {
+        "Properites":["5", "2", "3", "2"],
+        "Reactions":["Stuff","Rich"]
+    },
+    "Butterfly": {
+        "Properites":["5", "2", "3", "2"],
+        "Reactions":["Stuff","Rich"]
+    },
+    "Pure Bliss": {
+        "Properites":["5", "2", "3", "2"],
+        "Reactions":["Stuff","Rich"]
+    }
+
+}
