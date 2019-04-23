@@ -7,7 +7,7 @@ A generative text based adventure game paired with generative music that analyze
 
 Adventured unlocked is built with the following dependencies: pygame, MIDIUtil, and pickle.
 
-    pip install pygame, MIDIUtil, pickle
+    pip install pygame, MIDIUtil, pickle, midi2audio
     
 ### Running
 In order to run the game simply execute the following command:
