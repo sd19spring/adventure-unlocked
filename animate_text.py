@@ -1,12 +1,12 @@
 """
-Custom font implementation, text input, and text animation script in pygame
+Custom font implementation, text input, and text animation script in pg
 """
 
 import pygame as pg
 import os
 
 def customfont(name,size):
-    """Importing custom fonts into pygame"""
+    """Importing custom fonts into pg"""
 
     path = os.path.dirname(os.path.abspath(name))
     #print(type(path))
@@ -14,8 +14,9 @@ def customfont(name,size):
     font = pg.font.Font(os.path.join(path,name), size)
     return font
 
+
 def checkfonts():
-    """Checking font lists loaded in pygame"""
+    """Checking font lists loaded in pg"""
 
     print(pg.font.get_fonts())
 
@@ -33,8 +34,7 @@ def commandwindow():
     font = pg.font.SysFont(None, fontsize)
 
     output = ["This","is","a","test."]
-    text = "TEST TEST TEST TEST TEST TEST TEST TEST TEST"
-
+    text = "FRICK"
     done = False
     while not done:
         for event in pg.event.get():
@@ -108,9 +108,12 @@ def inputtext():
         #pg.display.flip()
         clock.tick(30)
 
+
+
+
 if __name__ == '__main__':
 
     pg.init()
-    #inputtext()
+    #message_display('Hello world')
     commandwindow()
     pg.quit()
