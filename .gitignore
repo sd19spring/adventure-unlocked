@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+content/
+items.json
+rooms.json
+test.json
+test1.json
