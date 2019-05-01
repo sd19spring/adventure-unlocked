@@ -5,6 +5,8 @@ Secondary test script to work on a different approach to outputting text
 import pygame as pg
 import time
 
+
+
 class Terminal():
     """
     Stores the current text to be displayed in the game
@@ -22,13 +24,20 @@ class Terminal():
         for i, l in enumerate(self.text):
             print('YES')
             time.sleep(1)
-            screen.blit(font.render(l, 0, (255,0,0)), (x, y + fsize*i))
+            txt_surf = font.render(l, 0, (255,0,0))
+            txtRect = txt_surf.get_rect()
+            txtRect.x = x
+            txtRect.y = y + fsize*i
+            screen.blit(txt_surf, txtRect)
 
 
 def main():
 
+    pg.init()
     terminal = Terminal()
     pg.font.init()
+
+    clock = pg.time.Clock()
 
     color = (0,0,255)
     txtcolor = (0,0,0)
@@ -44,17 +53,20 @@ def main():
     running = True
 
     while running:
-        screen.fill((255,255,255))
-        print(X,Y,fontsize,screen)
-        terminal.render_multi_line(terminal.text,X,Y,fontsize,screen,font)
-        terminal.update(input("Update list:"))
+
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                quit()
+
+        screen.fill((255,0,255))
+        print(X,Y,fontsize,screen)
+        terminal.render_multi_line(24,24,fontsize,screen,font)
+        terminal.update(input("Update list:"))
 
         pg.display.update()
-        pg.display.flip()
+        #pg.display.flip()
+        # clock.tick(60)
 
 if __name__ == '__main__':
     main()
