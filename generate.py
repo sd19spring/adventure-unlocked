@@ -3,6 +3,7 @@ Generates JSON file that composes the game interactions
 """
 
 import json, os, errno, random
+from queue import *
 from collections import defaultdict
 from world import ATTRIBUTES, OBJECT_TYPES, ITEMS, ROOMS
 
@@ -60,21 +61,60 @@ def generate_rooms(n, items):
     rooms = defaultdict(dict)
 
     # Choose n unique rooms
-    room_rand = random.sample(ROOMS, n)
+    possible_rooms = random.sample(ROOMS, n)
 
-    # TODO: Make rooms direction similar across all rooms to navigate. Random walk generation
-    for room in room_rand:
-        # Choose n-1 or 4 other rooms to navigate to
-        other_rooms = random.sample(list(filter(lambda r: r != room, room_rand)), n-1 if n-1 < 4 else 4)
+    # Shuffle chosen rooms
+    random.shuffle(possible_rooms)
 
+    # BFS generation
+    # TODO: Make sure start room is not locked
+    start = possible_rooms.pop()
+
+    frontier = Queue()
+    frontier.put(start)
+    came_from = {}
+    came_from[start] = None
+
+    print('start', start)
+
+    while not frontier.empty():
+        current = frontier.get()
+
+        # Decrement variable
+        dec = 1 if came_from[current] else 0
+
+        # Adjacent rooms (which rooms you can travel to from current room)
+        lower_bound = 0 if not (frontier.empty() and len(possible_rooms)) else 1
+        upper_bound = len(possible_rooms) if len(possible_rooms) < 4 - dec else 4 - dec
+        adj_rooms = [possible_rooms.pop() for i in range(random.randint(lower_bound, upper_bound))]
+        
+        # Pad adj_rooms with empty strings if no room to travel in that direction
+        while len(adj_rooms) < 4 - bool(came_from[current]):
+            adj_rooms.insert(random.randint(0, 4), '')
+
+        # Insert as an adj_room the room player came from so that the graph is bidirecitonal
+        if came_from[current]:
+            i, cf_room = came_from[current]
+            # Determine opposite direction: 0 -> 2, 1 -> 3, 2 -> 0, 3 -> 1
+            i = i + 2 if i < 2 else i - 2
+            adj_rooms.insert(i, cf_room)
+
+        for idx, next in enumerate(adj_rooms):
+            if next == "": continue
+            if next not in came_from:
+                frontier.put(next)
+                # idx corresponds to what direction coming from, 0 is north, 1 is east, 2 is south, 3 is west
+                came_from[next] = (idx, current)
+        
         # TODO: Make items placed in rooms contexual, Not enough items? 
-        item = random.sample(list(items.keys()), random.randint(0, len(items)-1))
-        rooms[room] = { "directions": other_rooms, "items": item }
+        item = random.sample(list(items.keys()), random.randint(1, len(items)-1))
+        print(item)
+        rooms[current] = { "directions": adj_rooms, "items": item }
 
     with open_w('content/rooms.json') as f:
         json.dump(rooms, f)
 
-def generate_world(i, r):
+def generate_world(i=5, r=3):
     """Generates the world environment (items, rooms)
     
     Args:
@@ -105,4 +145,4 @@ def open_w(path):
 
 if __name__ == "__main__":
     write_attributes()
-    generate_world(5, 3)
+    generate_world(4, 6)

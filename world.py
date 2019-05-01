@@ -45,4 +45,4 @@ ITEMS = {
     "desk": ["supporter"],
     "sword": ["weapon"]
 }
-ROOMS = ["kitchen", "living room", "bedroom", "balcony", "stairway", "hallway"]
+ROOMS = ["kitchen", "living room", "bedroom", "balcony", "stairway", "hallway", "basement", "bathroom", "cellar", "guest room", "closet", "shed"]
