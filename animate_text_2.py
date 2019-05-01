@@ -13,7 +13,8 @@ class Terminal():
     """
 
     def __init__(self):
-        self.text = ['Welcome to Adventure Unlocked','You are a person','This is a test','I am Colin.']
+        self.text = ['Welcome to Adventure Unlocked','You are a person','This is a test','I am Colin.',
+        'This is more filler','I think this working ok for now','But who knows']
 
     def update(self,input):
         self.text.pop(0)
@@ -39,8 +40,8 @@ def main():
 
     color = (0,0,255)
     txtcolor = (0,0,0)
-    fontsize = 20
-    input_box = pg.Rect(100, 100, 140, 32)
+    fontsize = 30
+    input_box = pg.Rect(20, 280, 30, fontsize*1.5)
     color_inactive = pg.Color('lightskyblue3')
     color_active = pg.Color('dodgerblue2')
 
@@ -59,7 +60,7 @@ def main():
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                done = True
+                running = False
             if event.type == pg.MOUSEBUTTONDOWN:
                 # If the user clicked on the input_box rect.
                 if input_box.collidepoint(event.pos):
@@ -74,12 +75,13 @@ def main():
                     if event.key == pg.K_RETURN:
                         terminal.update(text)
                         text = ''
+
                     elif event.key == pg.K_BACKSPACE:
                         text = text[:-1]
                     else:
                         text += event.unicode
 
-        screen.fill((255,255,255))
+        screen.fill((0,0,0))
 
         txt_surface = font.render(text, True, color)
         # Resize the box if the text is too long.
