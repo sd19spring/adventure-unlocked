@@ -25,7 +25,7 @@ class Terminal():
         #lines = text.splitlines()
         for i, l in enumerate(self.text):
             #print('YES')
-            txt_surf = font.render(l, 0, (255,0,0))
+            txt_surf = font.render(l, 0, (0,255,0))
             txtRect = txt_surf.get_rect()
             txtRect.x = x
             txtRect.y = y + fsize*i
