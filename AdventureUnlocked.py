@@ -3,6 +3,8 @@ A Text Based Adventure Game
 SofDes Final Project
 """
 import json
+import threading
+import music
 
 class Item ():
     """
@@ -11,21 +13,15 @@ class Item ():
     properties: A list of way that the player can interact with an Object
     reactions: A list of what happens when a player interacts with an Object
     """
-    def __init__(self, name, properties = None, reactions = None):
+    def __init__(self, name, properties = None):
         self.name = name
         if properties is None:
             properties = []
         self.properties = properties
-        if reactions is None:
-            reactions = []
-        self.reactions = reactions
-    def __str__():
+    def __str__(self):
         str = "Item[ Name: "+ name + "\nInventory ["
         for property in self.properties:
             str += "\n    "+ property
-        str += "    ]\nReactions ["
-        for reaction in self.reactions:
-            str += "\n    "+ reaction
         str += "    ]\n]\n"
         return str
     def check_property(self, input):
@@ -34,36 +30,7 @@ class Item ():
         corresponding reaction
         """
         for i, value in enumerate(self.properties):
-            if input == property:
-                return reactions[i]
-
-
-# Alternate Implemenation of Item where Properties are the keys for Reaction Values
-# class Item ():
-#     """
-#     An Object that a player can interact with
-#
-#     properties: A list of way that the player can interact with an Object
-#     reactions: A list of what happens when a player interacts with an Object
-#     """
-#     def __init__(self, name, properties = None, reactions = None):
-#         self.name = name
-#         if properties is None:
-#             properties = {}
-#         self.properties = properties
-#     def __str__():
-#         str = "Item[ Name: "+ name + "\nProperties ["
-#         for property in self.properties:
-#             str += "\n    "+ property + " " + properties[property]
-#         str +="   ]\n]\n"
-#         return str
-#     def check_property(self, input):
-#         if input in self.properties:
-#             return self.properties[input]
-#         else:
-#             # TODO: Implement Add actions.
-#             # TODO: Maps user inputs to Similar inputs and adds to list
-
+            return input == property
 
 class Player():
     """
@@ -78,8 +45,8 @@ class Player():
         if actions is None:
             actions = []
         self.actions = actions
-    def __str__():
-        str = "Player[ Name: "+ name + "\nInventory ["
+    def __str__(self):
+        str = "Player[\n    Inventory ["
         for item in self.inventory:
             str += "    \n"+ item
         str += "\n    ]\nActions ["
@@ -120,7 +87,7 @@ class Room():
         if actions is None:
             actions = []
         self.actions = actions
-    def __str__():
+    def __str__(self):
         str = "Player[ Name: "+ name + "\nInventory ["
         for item in self.inventory:
             str += "    \n"+ item
@@ -158,27 +125,31 @@ class Room():
         return self.rooms[direction]
 
 class Game():
-    def __init__(self, rooms = None):
+    def __init__(self, startRoom, rooms = None):
         self.player = Player()
         if rooms is None:
             rooms = {}
         self.rooms = rooms
-        self.currentRoom = rooms["1"] #TODO Start Room with Rich
-
+        print(startRoom)
+        self.currentRoom = rooms[startRoom]
+         #TODO Start Room with Rich
     def switchRoom(self, direction):
-        if(self.currentRoom.switchRoom(direction)):
+        if(self.currentRoom.switchRoom(direction) == 0):
+            print("Not a valid Direction. Please try another command.")
+        elif(self.currentRoom.switchRoom(direction) == ""):
+            print("There's no room there!")
+        else:
             print(self.currentRoom.switchRoom(direction))
             self.currentRoom = self.rooms[self.currentRoom.switchRoom(direction)]
-        else:
-            print("Not a valid Direction. Please try another command.")
+
 
 def load_items(itemsFile):
-    with open(roomsFile, 'r') as file:
+    with open(itemsFile, 'r') as file:
         data = file.read().replace('"', '\"')
     itemsdata = json.loads(data)
     items = {}
     for item in itemsdata:
-        items[item] = Item(item,itemsdata[item]["Properties"], itemsdata[item]["Reactions"], None)
+        items[item] = Item(item,itemsdata[item])
     return items
     return json.loads(data)
 
@@ -187,15 +158,26 @@ def load_rooms(roomsFile):
         data = file.read().replace('"', '\"')
     roomsdata = json.loads(data)
     rooms = {}
-    for room in roomsdata:
-        rooms[room] = Room(room,roomsdata[room]["Directions"], roomsdata[room]["Items"], None)
-    return rooms
+    for i,room in enumerate(roomsdata):
+        if i == 0:
+            startRoom = room
+            print(type(startRoom))
+        rooms[room] = Room(str(room),roomsdata[room]["directions"], roomsdata[room]["items"], None)
+
+    return startRoom, rooms
+class MusicThread(threading.Thread):
+    def run(self):
+        test = music.Song()
+        test.play_song()
 
 
 
 if __name__ == '__main__':
-    print(load_rooms("rooms.json"))
-    game = Game(load_rooms("rooms.json"))
+
+    mythread = MusicThread(name = "Thread-{}".format(1))  # ...Instantiate a thread and pass a unique ID to it
+    mythread.start()
+    startRoom, rooms = load_rooms("content/rooms.json")
+    game = Game(startRoom, rooms)
     print("Welcome to Adventure Unlocked")
     while True:
         print("You are in: " + game.currentRoom.name)
