@@ -13,8 +13,9 @@ class Terminal():
     """
 
     def __init__(self):
-        self.text = ['Welcome to Adventure Unlocked','You are a person','This is a test','I am Colin.',
-        'This is more filler','I think this working ok for now','But who knows']
+        self.mansion = self.mansion_name()
+        self.text = ['Welcome to Adventure Unlocked','You are a wandering the ' + self.mansion +' Mansion','Your objective is unclear',
+        'Your memories are hazy...','How did you end up here...','Maybe taking a look around will help you remember.','-------------------------------------------------------------------------',' ',' ',' ',' ',' ',' ']
 
     def update(self,input):
         self.text.pop(0)
@@ -30,6 +31,10 @@ class Terminal():
             txtRect.y = y + fsize*i
             screen.blit(txt_surf, txtRect)
 
+    def mansion_name(self):
+
+        return '[Default Name]'
+
 def main():
 
     # pg.init()
@@ -41,13 +46,13 @@ def main():
     color = (0,0,255)
     txtcolor = (0,0,0)
     fontsize = 30
-    input_box = pg.Rect(20, 280, 30, fontsize*1.5)
-    color_inactive = pg.Color('lightskyblue3')
-    color_active = pg.Color('dodgerblue2')
-
 
     X = 640
     Y = 480
+
+    input_box = pg.Rect(20, Y-60, 300, fontsize*1.5)
+    color_inactive = pg.Color('lightskyblue3')
+    color_active = pg.Color('dodgerblue2')
 
     screen = pg.display.set_mode((X, Y))
     pg.display.set_caption('Adventure Unlocked')
@@ -61,6 +66,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
+                pg.quit()
             if event.type == pg.MOUSEBUTTONDOWN:
                 # If the user clicked on the input_box rect.
                 if input_box.collidepoint(event.pos):
@@ -85,7 +91,7 @@ def main():
 
         txt_surface = font.render(text, True, color)
         # Resize the box if the text is too long.
-        width = max(200, txt_surface.get_width()+10)
+        width = max(X-40, txt_surface.get_width()+10)
         input_box.w = width
         # Blit the text.
         screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
