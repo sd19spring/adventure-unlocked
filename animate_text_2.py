@@ -3,9 +3,9 @@ Secondary test script to work on a different approach to outputting text
 """
 
 import pygame as pg
+import random
 import time
-
-pg.init
+import os
 
 class Terminal():
     """
@@ -14,8 +14,10 @@ class Terminal():
 
     def __init__(self):
         self.mansion = self.mansion_name()
-        self.text = ['Welcome to Adventure Unlocked','You are a wandering the ' + self.mansion +' Mansion','Your objective is unclear',
-        'Your memories are hazy...','How did you end up here...','Maybe taking a look around will help you remember.','-------------------------------------------------------------------------',' ',' ',' ',' ',' ',' ']
+        self.text = ['Welcome to Adventure Unlocked','You are a wandering the ' + self.mansion,'Your objective is unclear',
+        'Your memories are hazy...','How did you end up here...','Maybe taking a look around will help you remember.',
+        '-------------------------------------------------------------------------',
+        ' ',' ',' ',' ',' ',' ']
 
     def update(self,input):
         self.text.pop(0)
@@ -33,36 +35,54 @@ class Terminal():
 
     def mansion_name(self):
 
-        return '[Default Name]'
+        mansion_names = ['Bayview Manor','Humbleblossom Residence','Riverswood Estate','Ivory Manor','Green Meadow Chateau','Beauhold Mansion','Rosenphrey Estate',
+        'Davenlyn Residence','Rottlyn Chateau','Shanders Residence','Elm Estate','Whisperwind Residence','Jade River Estate','Beaverlake Estate','Humble Hill Chateau','Ruxstrong Manor','Monstrong Residence',
+        'Gregford Residence','Palbrook Manor','Pickdel Estate','Evergreen Valley Residence','Crystal Lake Chateau','Evergreen Mansion','Whitland Chateau','Honeydrop Residence','Stratkett Manor',
+        'Pitgor Residence','Meastrong Estate','Chalger Manor','Woodmier Manor','Ivylane Manor','Grapevine Manor','Woodrest Manor','Hazelbend Mansion','Belcourt Residence','Gallotero Estate','Spenperd Estate',
+        'Harringsen Mansion','Palding Residence','Shearcomb Chateau','Graceview Chateau','Stonewill Mansion','Poinsetta Manor',"Raven's Nest Residence",'Dewberry Residence','Fielgett Manor']
 
+        return mansion_names[random.randint(0,len(mansion_names)-1)]
+        
 def main():
 
-    # pg.init()
+    # Initializing pygame, fonts, and the terminal class
+    pg.init()
     terminal = Terminal()
     pg.font.init()
-
     clock = pg.time.Clock()
 
+    #Font colors and size
     color = (0,0,255)
     txtcolor = (0,0,0)
     fontsize = 30
 
+    #Screen size
     X = 640
     Y = 480
 
+    #Definiting input box
     input_box = pg.Rect(20, Y-60, 300, fontsize*1.5)
     color_inactive = pg.Color('lightskyblue3')
     color_active = pg.Color('dodgerblue2')
 
     screen = pg.display.set_mode((X, Y))
     pg.display.set_caption('Adventure Unlocked')
-    font = pg.font.SysFont(None, fontsize)
+
+
+    #Trying to get custom fonts to work
+    try:
+        font = pg.font.Font("Fonts/DeterminationMonoWeb.ttf",fontsize)
+    except RuntimeError:
+        font = pg.font.SysFont("monospace", fontsize)
+
+    #Intializing text input and setting game loop to be running
     text = ''
     active = False
     running = True
 
     while running:
 
+        #----- Checking for quit sequence and taking in user input -----
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
@@ -87,26 +107,22 @@ def main():
                     else:
                         text += event.unicode
 
+        #----- Fill screen black ------
         screen.fill((0,0,0))
 
+        #----- Rendering the text box current state -----
         txt_surface = font.render(text, True, color)
-        # Resize the box if the text is too long.
         width = max(X-40, txt_surface.get_width()+10)
         input_box.w = width
-        # Blit the text.
         screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
-        # Blit the input_box rect.
         pg.draw.rect(screen, color, input_box, 2)
 
-
-        # screen.fill((255,255,255))
-        #print(X,Y,fontsize,screen)
+        #----- Rendering the text for the game output -----
         terminal.render_multi_line(24,24,fontsize,screen,font)
-        #terminal.update(input("Update list:"))
 
-#        pg.display.update()
         pg.display.flip()
         clock.tick(60)
 
 if __name__ == '__main__':
+    #Run game
     main()
