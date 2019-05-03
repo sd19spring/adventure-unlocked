@@ -6,6 +6,7 @@ import pygame as pg
 import random
 import time
 import os
+import theENGINE as engine
 
 class Terminal():
     """
@@ -20,8 +21,9 @@ class Terminal():
         ' ',' ',' ',' ',' ',' ']
 
     def update(self,input):
-        self.text.pop(0)
-        self.text.append(input)
+        for line in input:
+            self.text.pop(0)
+            self.text.append(line)
 
     def render_multi_line(self,x,y,fsize,screen,font):
         #lines = text.splitlines()
@@ -42,12 +44,15 @@ class Terminal():
         'Harringsen Mansion','Palding Residence','Shearcomb Chateau','Graceview Chateau','Stonewill Mansion','Poinsetta Manor',"Raven's Nest Residence",'Dewberry Residence','Fielgett Manor']
 
         return mansion_names[random.randint(0,len(mansion_names)-1)]
-        
+
 def main():
 
     # Initializing pygame, fonts, and the terminal class
     pg.init()
+
     terminal = Terminal()
+    game,startRoom = engine.startGame()
+    terminal.update([startRoom])
     pg.font.init()
     clock = pg.time.Clock()
 
@@ -73,7 +78,7 @@ def main():
     try:
         font = pg.font.Font("Fonts/DeterminationMonoWeb.ttf",fontsize)
     except RuntimeError:
-        font = pg.font.SysFont("monospace", fontsize)
+        font = pg.font.SysFont(None, fontsize)
 
     #Intializing text input and setting game loop to be running
     text = ''
@@ -99,7 +104,8 @@ def main():
             if event.type == pg.KEYDOWN:
                 if active:
                     if event.key == pg.K_RETURN:
-                        terminal.update(text)
+                        terminal.update([text])
+                        terminal.update(engine.handleInput(game, text))
                         text = ''
 
                     elif event.key == pg.K_BACKSPACE:
