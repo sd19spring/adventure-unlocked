@@ -45,4 +45,10 @@ ITEMS = {
     "desk": ["supporter"],
     "sword": ["weapon"]
 }
-ROOMS = ["kitchen", "living room", "bedroom", "balcony", "stairway", "hallway", "basement", "bathroom", "cellar", "guest room", "closet", "shed"]
+ROOMS = ["kitchen", "living room", "bedroom", "bathroom", "guest room", "closet", "library", "gym", "theater", "play room", "spa", "bar"]
+OUTSIDE = ["shed", "patio", "garden", "pond", "forest", "pool"]
+LOWER_FLOORS = ["wine celler", "dungeon", "batcave", "cave", "secret room", "why is it damp here", "creepy corner", "a homeless man seems to be living here"]
+
+# Tunnels in batcave
+
+# Transition rooms: stairway, hallway
