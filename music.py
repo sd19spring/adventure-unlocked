@@ -7,50 +7,68 @@ from random import choice, randint
 from psonic import *
 
 class Song:
-    def __init__(self, bpm=-1, intervals=-1, beats=-1, volumes = -1):
+    def __init__(self, bpm=-1, notes=-1, beats=-1, volumes = -1):
+        # selects sound file to play music off of
+        self.SAMPLES_DIR = os.path.join(os.path.dirname(__file__), "samples")
+        self.SAMPLE_FILE = os.path.join(self.SAMPLES_DIR, "bass_D2.wav")
+        self.SAMPLE_NOTE = D2
+
+        # sets tempo of song
         if bpm == -1:
             self.new_tempo()
         else:
             self.bpm = bpm
 
-        self.SAMPLES_DIR = os.path.join(os.path.dirname(__file__), "samples")
-        self.SAMPLE_FILE = os.path.join(self.SAMPLES_DIR, "bass_D2.wav")
-        self.SAMPLE_NOTE = D2
-
-        if intervals == -1:
-            intervals = [40, 43, 45, 46, 47, 50, 52, 55, 57, 
+        # creates list of notes to select from
+        if notes == -1:
+            notes = [40, 43, 45, 46, 47, 50, 52, 55, 57, 
                58, 59, 62, 64, 67, 69, 70, 71, 74, 76]
-        self.notes = intervals
+        self.notes = notes
         
+        # creates list of beat lengths to select from
         if beats == -1:
             beats = [2, 1, 1/2, 1/4, 1/2, 1, 1]
         self.beats = beats
 
+        # creates list of volumes to select from
         if volumes == -1:
             volumes = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 3, 3, 3, 3, 2.5, 2.5, 3.5, 3.5]
         self.volumes = volumes
 
+        # holds phrases that are currently part of the song
         self.phrases = []
 
-        self.sonic = self.open_sonicpi()
+        # initializes song by opening sonicpi and generating phrases
+        self.open_sonicpi()
         self.generate_phrases()
         time.sleep(10)
 
     def open_sonicpi(self,name='sonic-pi'):
+        """
+        Opens sonicpi using subprocesses
+
+        returns whether or not sonic pi is open
+        """
+        # tries to open sonic pi
         try:
             self.sonic = subprocess.Popen([name])
-            return True
+            self.sonic_is_open = True
+        # catches case where sonic pi is not downloaded
         except OSError:
             print('Ahhhhh! Please install Sonic Pi.')
-            return False
+            self.sonic_is_open = False
 
     def close_sonicpi(self):
+        """Closes sonicpi using subprocesses"""
+        # tries to kill sonicpi
         try:
             self.sonic.kill()
+        # catches case where sonicpi has not yet been opened
         except AttributeError:
             print('Sonic Pi has not yet been opened.')
         
     def new_tempo(self, min_bpm=70, max_bpm=140):
+        """Updates song's tempo"""
         self.bpm = choice(list(range(min_bpm,max_bpm,1)))
 
     def play_note(self, note, beats, amp):
@@ -119,7 +137,7 @@ class Song:
 
     def generate_phrase(self, beats=4, note=-1):
         """
-        generates a random phrase with n beats that starts on
+        generates a random phrase with beats beats that starts on
         start_note with length of start_beat. Total phrase length
         will equal to total beats
 
@@ -149,7 +167,7 @@ class Song:
         returns a list of n phrases
         """
         for i in range(n):
-            self.generate_phrase(choice([8,12,16]))
+            self.generate_phrase(choice([4,6,8]))
 
     def play_phrase(self):
         """
@@ -166,15 +184,13 @@ class Song:
 
 
 if __name__ == "__main__":
-    import time
     song = Song()
 
     game = True
     text = 'asdf'
     temp = text
 
-    while song.sonic and game:
-        
+    while song.sonic_is_open and game:
         if temp != text:
             song.update_song()
         song.play_phrase()
