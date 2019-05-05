@@ -63,6 +63,7 @@ def generate_rooms(n, f, items):
     rooms = defaultdict(dict)
 
     # Choose n rooms and fill 2D list of rooms by floor
+    # TODO: Basements
     possible_rooms = []
     for i in range(f - 1):
         # n rooms left, need to reserve f - i rooms for stairways in floors left, 
@@ -82,56 +83,56 @@ def generate_rooms(n, f, items):
     print(possible_rooms)
 
 
-    # # BFS generation
-    # # TODO: Make sure start room is not locked
-    # start = possible_rooms.pop()
+    # BFS generation
+    # TODO: Make sure start room is not locked
+    start = possible_rooms.pop()
 
-    # frontier = Queue()
-    # frontier.put(start)
-    # came_from = {}
-    # came_from[start] = None
+    frontier = Queue()
+    frontier.put(start)
+    came_from = {}
+    came_from[start] = None
 
-    # print('start', start)
+    print('start', start)
 
-    # while not frontier.empty():
-    #     current = frontier.get()
+    while not frontier.empty():
+        current = frontier.get()
 
-    #     if current == "stairway":
-    #         pass
+        if current == "stairway":
+            pass
 
-    #     # Reserve one travel direction for room that current came from
-    #     dec = 1 if came_from[current] else 0
+        # Reserve one travel direction for room that current came from
+        dec = 1 if came_from[current] else 0
 
-    #     # Adjacent rooms (which rooms you can travel to from current room)
-    #     lower_bound = 0 if not (frontier.empty() and len(possible_rooms)) else 1
-    #     upper_bound = len(possible_rooms) if len(possible_rooms) < 4 - dec else 4 - dec
-    #     adj_rooms = [possible_rooms.pop() for i in range(random.randint(lower_bound, upper_bound))]
+        # Adjacent rooms (which rooms you can travel to from current room)
+        lower_bound = 0 if not (frontier.empty() and len(possible_rooms)) else 1
+        upper_bound = len(possible_rooms) if len(possible_rooms) < 4 - dec else 4 - dec
+        adj_rooms = [possible_rooms.pop() for i in range(random.randint(lower_bound, upper_bound))]
         
-    #     # Pad adj_rooms with empty strings if no room to travel in that direction
-    #     while len(adj_rooms) < 4 - bool(came_from[current]):
-    #         adj_rooms.insert(random.randint(0, 4), '')
+        # Pad adj_rooms with empty strings if no room to travel in that direction
+        while len(adj_rooms) < 4 - bool(came_from[current]):
+            adj_rooms.insert(random.randint(0, 4), '')
 
-    #     # Insert as an adj_room the room player came from so that the graph is bidirecitonal
-    #     if came_from[current]:
-    #         i, cf_room = came_from[current]
-    #         # Determine opposite direction: 0 -> 2, 1 -> 3, 2 -> 0, 3 -> 1
-    #         i = i + 2 if i < 2 else i - 2
-    #         adj_rooms.insert(i, cf_room)
+        # Insert as an adj_room the room player came from so that the graph is bidirecitonal
+        if came_from[current]:
+            i, cf_room = came_from[current]
+            # Determine opposite direction: 0 -> 2, 1 -> 3, 2 -> 0, 3 -> 1
+            i = i + 2 if i < 2 else i - 2
+            adj_rooms.insert(i, cf_room)
 
-    #     for idx, next in enumerate(adj_rooms):
-    #         if next == "": continue
-    #         if next not in came_from:
-    #             frontier.put(next)
-    #             # idx corresponds to what direction coming from, 0 is north, 1 is east, 2 is south, 3 is west
-    #             came_from[next] = (idx, current)
+        for idx, next in enumerate(adj_rooms):
+            if next == "": continue
+            if next not in came_from:
+                frontier.put(next)
+                # idx corresponds to what direction coming from, 0 is north, 1 is east, 2 is south, 3 is west
+                came_from[next] = (idx, current)
         
-    #     # TODO: Make items placed in rooms contexual, Not enough items? 
-    #     item = random.sample(list(items.keys()), random.randint(1, len(items)-1))
-    #     print(item)
-    #     rooms[current] = { "directions": adj_rooms, "items": item }
+        # TODO: Make items placed in rooms contexual, Not enough items? 
+        item = random.sample(list(items.keys()), random.randint(1, len(items)-1))
+        print(item)
+        rooms[current] = { "directions": adj_rooms, "items": item }
 
-    # with open_w('content/rooms.json') as f:
-    #     json.dump(rooms, f)
+    with open_w('content/rooms.json') as f:
+        json.dump(rooms, f)
 
 def generate_world(i=5, r=10, f=4):
     """Generates the world environment (items, rooms)
