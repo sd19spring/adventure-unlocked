@@ -1,0 +1,26 @@
+{
+  "bedroom": {
+    "directions": ["basement", "stairway", "", "bathroom"],
+    "items": ["chest"]
+  },
+  "basement": {
+    "directions": ["", "", "bedroom", ""],
+    "items": ["lamp"]
+  },
+  "stairway": {
+    "directions": ["closet", "", "", "bedroom"],
+    "items": ["lamp", "desk"]
+  },
+  "bathroom": {
+    "directions": ["", "bedroom", "", ""],
+    "items": ["chest", "desk"]
+  },
+  "closet": {
+    "directions": ["shed", "", "stairway", ""],
+    "items": ["lamp"]
+  },
+  "shed": {
+    "directions": ["", "", "closet", ""],
+    "items": ["lamp", "chest"]
+  }
+}
