@@ -1,1 +1,27 @@
-{"portable": {"prompts": [["pick up", "lift", "get", "equip"], ["put down", "drop"]], "reactions": ["move to inventory", "move to placeable"]}, "edible": {"prompts": [["eat", "consume"]], "reactions": ["health increase"]}, "openable": {"prompts": [["open", "open up"]], "reactions": ["state open"]}, "withstand": {"reactons": ["supports portable"]}, "usable": {"propmts": [["use"]], "reactions": ["use _"]}, "slippery": {"reactions": ["drop _"]}, "poisonous": {"reactions": ["health decrease"]}, "heavy": {"reactions": ["movement_speed decrease"]}}
+{
+  "portable": {
+    "prompts": [
+      ["pick up", "lift", "get", "equip"],
+      ["put down", "drop"]
+    ],
+    "reactions": ["move to inventory", "move to placeable"]
+  },
+  "edible": {
+    "prompts": [
+      ["eat", "consume"]
+    ],
+    "reactions": ["health increase"]
+  },
+  "openable": {
+    "prompts": [
+      ["open", "open up"]
+    ],
+    "reactions": ["state open"]
+  },
+  "usable": {
+    "prompts": [
+      ["use"]
+    ],
+    "reactions": ["use _"]
+  }
+}

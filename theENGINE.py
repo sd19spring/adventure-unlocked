@@ -25,13 +25,13 @@ class Item ():
             str += "\n    "+ property
         str += "    ]\n]\n"
         return str
-    def check_property(self, input):
+    def item_input(self, input):
         """
         Checks if the users input is a valid interaction and returns the
         corresponding reaction
         """
-        for i, value in enumerate(self.properties):
-            return input == property
+        for attribute in self.properties:
+            pass
 
 class Player():
     """
@@ -145,6 +145,22 @@ class Game():
 
 
 
+def load_attibutes(attributeFile):
+    with open(attributeFile, 'r') as file:
+        data = file.read().replace('"', '\"')
+    adata = json.loads(data)
+    attributes = {}
+    for attribute in adata:
+        print(adata[attribute])
+        for i, actionset in enumerate(adata[attribute]['prompts']):
+            for action in actionset:
+                attributes[action] = adata[attribute]['reactions'][i]
+
+
+    print(attributes)
+    # return attributes
+
+
 def load_items(itemsFile):
     with open(itemsFile, 'r') as file:
         data = file.read().replace('"', '\"')
@@ -169,8 +185,19 @@ def load_rooms(roomsFile):
     return startRoom, rooms
 class MusicThread(threading.Thread):
     def run(self):
-        test = music.Song()
-        test.play_song()
+        song = music.Song()
+
+        game = True
+        text = 'asdf'
+        temp = text
+
+        while song.sonic_is_open and game:
+            if temp != text:
+                song.update_song()
+            song.play_phrase()
+            temp = text
+
+        song.close_sonicpi()
 
 def handleInput(game, input):
     str = []
@@ -209,6 +236,7 @@ def startGame():
         #     print("Sorry this action is not supported just yet")
 
 if __name__ == '__main__':
-    game = startGame()
+    load_attibutes("content/attritubes.json")
+    game, str = startGame()
     while True:
         print(handleInput(game,input("")))
