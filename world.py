@@ -50,7 +50,7 @@ ITEMS = {
     "phone": ["event"],
     "human blood": ["event"],
     "mirror": ["event"],
-    "notes": ["event"] # Use notes to move plot along
+    # "notes": ["event"] # Use notes to move plot along
 }
 ROOMS = ["kitchen", "living room", "bedroom", "ballroom", "dining hall", "bathroom", "guest room", "closet", 
         "library", "gym", "theater", "butler's quarters", "spa", "bar", "lab", "office", "parlor", "billard room"]

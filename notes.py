@@ -3,11 +3,6 @@
 # And interprets JSON files and reconstruct them as Notes objects
 import json, pprint
 
-class Event():
-    def __init__(self):
-        pass
-
-
 class Notes():
     # Class variable counting number of notes created
     notes_num = 0
@@ -24,12 +19,12 @@ class Notes():
             'title': self.title,
             'day': self.day,
             'text': self.text,
+            'events': self.events
         }
-        # TODO: event
 
         with open(path, 'r+') as f:
             data = json.load(f)
-            data['Note ' + str(Notes.notes_num)] = note
+            data['note ' + str(Notes.notes_num)] = note
             f.seek(0) 
             json.dump(data, f)
     

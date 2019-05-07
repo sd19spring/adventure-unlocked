@@ -6,6 +6,7 @@ import json, os, errno, random
 from queue import *
 from collections import defaultdict
 from world import ATTRIBUTES, OBJECT_TYPES, ITEMS, ROOMS, OUTSIDE, LOWER_FLOORS
+from notes import Notes
 
 def write_attributes():
     """
@@ -99,7 +100,6 @@ def generate_rooms(n, f, items):
 
     print('start', start)
 
-
     # BFS generation
     # TODO: Make sure start room is not locked
     start = possible_rooms.pop()
@@ -146,9 +146,15 @@ def generate_rooms(n, f, items):
         # TODO: Make items placed in rooms contexual, Not enough items? 
         item = random.sample(list(items.keys()), random.randint(1, len(items)-1))
 
-        
         print(item)
         rooms[current] = { "directions": adj_rooms, "items": item }
+
+    # Put notes into random rooms
+    path = './content/notes.json'
+    notes = Notes.from_json(path)
+    for i in notes.keys():
+        rand_room = random.choice(list(rooms.keys()))
+        rooms[rand_room]['items'].append(i)
 
     with open_w('content/rooms.json') as f:
         json.dump(rooms, f)
@@ -166,6 +172,26 @@ def generate_world(i=5, r=10, f=4):
     items = generate_items(i)
     generate_rooms(r, f, items)
     
+def generate_notes():
+    # TODO: Add variations of core notes, and generate from list
+    path = './content/notes.json'
+    Notes.setup(path)
+    note_text = "I’ve finally arrived at [Mansion Name]. I can’t wait to restart my research once again. I think I may finally have the means to complete my grand vision. Only time will tell…"
+    note = Notes('Starting my research', 1, note_text)
+    note.to_json(path)
+
+    note_text = "I have made a recent breakthrough. Manipulating atoms may not be as difficult as previously expected. I can likely use this to create any element that I desire. *Some fancy formulas that you don’t understand are also written*"
+    note = Notes('Breakthrough!', 92, note_text)
+    note.to_json(path)
+
+    note_text = "In recent days, I have made more and more breakthroughs, but I feel that someone has been watching me. I will continue to be wary of those around me."
+    note = Notes('Someone is Watching…', 141, note_text)
+    note.to_json(path)
+
+    note_text = "Someone has found me. I am writing this note in desperation. If you find it, I am likely dead. Find my murderer. Protect my research. *The writing looks rushed and there is blood on the note. A key is taped to the back.*"
+    note = Notes('Someone is out to get me…', 169, note_text)
+    note.to_json(path)
+
 
 def mkdir(path):
     """
@@ -186,5 +212,6 @@ def open_w(path):
     return open(path, 'w')
 
 if __name__ == "__main__":
+    generate_notes()
     write_attributes()
     generate_world()
