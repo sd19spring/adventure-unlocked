@@ -26,7 +26,7 @@ to install sonic-pi:
 ### Running
 To run the game simply execute the following command:
 
-    python AdventureUnlocked.py
+    python adventure_unlocked.py
 
 ## Want to know how the game works?
 There are four main aspects of the code: a game engine, world generation, music generation, and visualization. These are them combined to create a playable, generative game.
@@ -34,9 +34,8 @@ There are four main aspects of the code: a game engine, world generation, music 
 The game engine is effectively the core that ties together the other componenets of the game. The engine handles json interpretation, User input interpretation and maintainence of game state. The first two features are two are exercises in string parsing and responding to the users commands. The game state is mainly run through pygame. However, over many games, the users data can be saved through json and text files.
 
 ### World Generation
-The world is composed of rooms to traverse and items to interact with. To generate these two, we decided to perform bottom up generation, having items by composed of different attributes that describe properties and reactions, and have rooms be filled with such items to interact with.
+The world is composed of rooms to traverse and items to interact with. To generate these two, we decided to perform bottom up generation, having items by composed of different attributes that describe properties and reactions, and have rooms be filled with such items to interact with. The rooms are generated in order with breadth-first-search to ensure that the player is able to traverse in either direction from and to rooms back and forth.
 
-TODO: Add flow diagram to show structure of generation and random walk
 ### Music Generation
 
 ![](https://i.imgur.com/8sIZx5q.jpg)
@@ -50,8 +49,6 @@ A list was made for holding different weights for beat lengths - eighth, quarter
 In order to create the visuals for our text game we used pygame to replicate a terminal style window. This was done to create easy text input and also animate text outputted from the game. This animation is done to simulate the game speaking to the player rather than the player just reading the game output. The terminal is the primary method of interacting with the game as you traverse the generated landscape of Adventure Unlocked.
 
 ![](https://i.imgur.com/GNzzocS.png)
-
-TODO: Gif of text animation
 
 ## Our Inspiration
 

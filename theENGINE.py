@@ -289,7 +289,7 @@ class Game():
         return clean_output(res)
 def clean_output(res):
     out = []
-    wrap_len = 126
+    wrap_len = 125
     for chunk in res:
         arr =  chunk.split("\n")
         for line in arr:

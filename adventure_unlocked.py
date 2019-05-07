@@ -15,7 +15,7 @@ class Terminal():
         self.mansion = self.mansion_name()
         self.text = ['Welcome to Adventure Unlocked','You are a wandering the ' + self.mansion,'Your objective is unclear',
         'Your memories are hazy...','How did you end up here...','Maybe taking a look around will help you remember.',
-        'Total rooms: ' + str(rooms), 'Notes left to uncover: ' + str(notes), 'You have ' + str(decisions) + ' decisions to determine the story.',
+        'Total rooms: ' + str(rooms), 'Notes left to uncover: ' + str(notes), 'You have ' + str(decisions) + ' decisions to piece together the story.',
         '[Try using commands such as "go _", "pick up _", or "help"]',
         '-------------------------------------------------------------------------']
 
@@ -47,8 +47,8 @@ class Terminal():
 
 def main():
     # Generate game
-    r = random.randint(7, len(ROOMS))
-    decisions = r * 15
+    r = random.randint(5, len(ROOMS))
+    decisions = r * 7
 
     generate.mkdir('./content')
     generate.generate_notes()
@@ -75,8 +75,8 @@ def main():
         return
 
     terminal = Terminal(r, 15, decisions)
-    game,str= engine.startGame()
-    terminal.update(str)
+    game,res= engine.startGame()
+    terminal.update(res)
     pg.font.init()
     clock = pg.time.Clock()
 
@@ -156,6 +156,12 @@ def main():
 
             #----- Rendering the text for the game output -----
             terminal.render_multi_line(24,24,fontsize,screen,font)
+
+            #----- Render decisions and notes left -------
+            d_surf = font.render('Decisions made: ' + str(decision) + '/' + str(decisions), True, (255, 0, 0))
+            screen.blit(d_surf, (X - d_surf.get_width() - 50, 20))
+            d_surf = font.render('Notes left: ' + str(15 - len(notes)) + '/15', True, (255, 0, 0))
+            screen.blit(d_surf, (X - d_surf.get_width() - 50, 50))
 
             pg.display.flip()
             clock.tick(60)
