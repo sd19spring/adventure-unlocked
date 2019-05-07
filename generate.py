@@ -1,7 +1,6 @@
 """
 Generates JSON file that composes the game interactions
 """
-
 import json, os, errno, random
 from queue import *
 from collections import defaultdict
@@ -241,6 +240,7 @@ def open_w(path):
     return open(path, 'w')
 
 if __name__ == "__main__":
+    mkdir('./content')
     generate_notes()
     write_attributes()
     generate_world()
