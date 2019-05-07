@@ -1,26 +1,116 @@
 {
-  "bedroom": {
-    "directions": ["basement", "stairway", "", "bathroom"],
-    "items": ["chest"]
-  },
-  "basement": {
-    "directions": ["", "", "bedroom", ""],
-    "items": ["lamp"]
-  },
-  "stairway": {
-    "directions": ["closet", "", "", "bedroom"],
-    "items": ["lamp", "desk"]
-  },
-  "bathroom": {
-    "directions": ["", "bedroom", "", ""],
-    "items": ["chest", "desk"]
-  },
-  "closet": {
-    "directions": ["shed", "", "stairway", ""],
-    "items": ["lamp"]
-  },
-  "shed": {
-    "directions": ["", "", "closet", ""],
-    "items": ["lamp", "chest"]
-  }
+    "billard room": {
+        "directions": [
+            "butler's quarters",
+            "parlor",
+            "",
+            "ballroom"
+        ],
+        "items": [
+            "mirror",
+            "sword"
+        ]
+    },
+    "butler's quarters": {
+        "directions": [
+            "",
+            "",
+            "billard room",
+            ""
+        ],
+        "items": [
+            "desk",
+            "mirror",
+            "sword"
+        ]
+    },
+    "parlor": {
+        "directions": [
+            "",
+            "office",
+            "",
+            "billard room"
+        ],
+        "items": [
+            "sword"
+        ]
+    },
+    "ballroom": {
+        "directions": [
+            "library",
+            "billard room",
+            "closet",
+            "gym"
+        ],
+        "items": [
+            "desk"
+        ]
+    },
+    "office": {
+        "directions": [
+            "",
+            "",
+            "",
+            "parlor"
+        ],
+        "items": [
+            "sword",
+            "apple",
+            "notes",
+            "mirror"
+        ]
+    },
+    "library": {
+        "directions": [
+            "",
+            "",
+            "ballroom",
+            ""
+        ],
+        "items": [
+            "apple",
+            "mirror",
+            "desk",
+            "notes"
+        ]
+    },
+    "closet": {
+        "directions": [
+            "ballroom",
+            "",
+            "",
+            ""
+        ],
+        "items": [
+            "desk",
+            "notes",
+            "apple"
+        ]
+    },
+    "gym": {
+        "directions": [
+            "bedroom",
+            "ballroom",
+            "",
+            ""
+        ],
+        "items": [
+            "mirror",
+            "sword",
+            "apple",
+            "desk"
+        ]
+    },
+    "bedroom": {
+        "directions": [
+            "",
+            "",
+            "gym",
+            ""
+        ],
+        "items": [
+            "mirror",
+            "desk"
+        ]
+    }
 }

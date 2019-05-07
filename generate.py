@@ -11,7 +11,7 @@ def write_attributes():
     """
     Writes item attributes to /content/attributes.json 
     """
-    with open_w('content/attritubes.json') as f:
+    with open_w('content/attributes.json') as f:
         json.dump(ATTRIBUTES, f)
 
 
@@ -64,23 +64,40 @@ def generate_rooms(n, f, items):
 
     # Choose n rooms and fill 2D list of rooms by floor
     # TODO: Basements
-    possible_rooms = []
-    for i in range(f - 1):
-        # n rooms left, need to reserve f - i rooms for stairways in floors left, 
-        # need to reserve (f - i - 1) rooms so that no floor is just a stairway
-        r_num = random.randint(1, n - (f - i) - (f - i - 1)) 
-        possible_rooms += [random.sample(ROOMS, r_num)]
-        possible_rooms[i].append("stairway")
-        n -= r_num + 1
+    # possible_rooms = []
+    # for i in range(f - 1):
+    #     # n rooms left, need to reserve f - i rooms for stairways in floors left, 
+    #     # need to reserve (f - i - 1) rooms so that no floor is just a stairway
+    #     r_num = random.randint(1, n - (f - i) - (f - i - 1)) 
+    #     possible_rooms += [random.sample(ROOMS, r_num)]
+    #     possible_rooms[i].append("stairway")
+    #     n -= r_num + 1
 
-        # Shuffle chosen rooms
-        random.shuffle(possible_rooms[i])
+    #     # Shuffle chosen rooms
+    #     random.shuffle(possible_rooms[i])
 
-    possible_rooms += [random.sample(ROOMS, n - 1)]
-    possible_rooms[-1].append("stairway")
-    random.shuffle(possible_rooms[-1])
+    # possible_rooms += [random.sample(ROOMS, n - 1)]
+    # possible_rooms[-1].append("stairway")
+    # random.shuffle(possible_rooms[-1])
 
-    print(possible_rooms)
+    # print(possible_rooms)
+
+    # Choose n unique rooms
+    possible_rooms = random.sample(ROOMS, n)
+
+    # Shuffle chosen rooms
+    random.shuffle(possible_rooms)
+
+    # BFS generation
+    # TODO: Make sure start room is not locked
+    start = possible_rooms.pop()
+
+    frontier = Queue()
+    frontier.put(start)
+    came_from = {}
+    came_from[start] = None
+
+    print('start', start)
 
 
     # BFS generation
@@ -128,6 +145,8 @@ def generate_rooms(n, f, items):
         
         # TODO: Make items placed in rooms contexual, Not enough items? 
         item = random.sample(list(items.keys()), random.randint(1, len(items)-1))
+
+        
         print(item)
         rooms[current] = { "directions": adj_rooms, "items": item }
 

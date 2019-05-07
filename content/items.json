@@ -1,1 +1,19 @@
-{"chest": ["openable", "withstand"], "desk": ["withstand"], "lamp": ["portable"]}
+{
+    "notes": [
+        ""
+    ],
+    "mirror": [
+        ""
+    ],
+    "desk": [
+        "withstand"
+    ],
+    "apple": [
+        "portable",
+        "edible"
+    ],
+    "sword": [
+        "portable",
+        "usable"
+    ]
+}
