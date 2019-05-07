@@ -374,8 +374,8 @@ def startGame():
     """
     Method to set up game Object for gameplay and start music thread
     """
-    # mythread = MusicThread(name = "Thread-{}".format(1))  # ...Instantiate a thread and pass a unique ID to it
-    # mythread.start()
+    mythread = MusicThread(name = "Thread-{}".format(1))  # ...Instantiate a thread and pass a unique ID to it
+    mythread.start()
 
     attributes, actions = load_attibutes("content/attributes.json")
     items = load_items("content/items.json")

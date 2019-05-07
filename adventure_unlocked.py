@@ -75,7 +75,7 @@ def main():
         return
 
     terminal = Terminal(r, 15, decisions)
-    game,res= engine.startGame()
+    game, res = engine.startGame()
     terminal.update(res)
     pg.font.init()
     clock = pg.time.Clock()
