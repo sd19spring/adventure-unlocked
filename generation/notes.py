@@ -1,4 +1,5 @@
-import json, pprint, jsonable
+import json, pprint
+from generation import jsonable
 
 class Notes(jsonable.Jsonable):
     """
