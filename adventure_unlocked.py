@@ -52,7 +52,7 @@ def main():
 
     terminal = Terminal()
     game,str= engine.startGame()
-    terminal.update([str])
+    terminal.update(str)
     pg.font.init()
     clock = pg.time.Clock()
 
