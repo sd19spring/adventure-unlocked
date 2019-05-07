@@ -9,11 +9,7 @@ ATTRIBUTES = {
     },
     "edible": {
         "prompts": [["eat", "consume"]],
-        "reactions": ["health increase"]
-    },
-    "openable": {
-        "prompts": [["open",  "open up"]],
-        "reactions": ["state open"]
+        "reactions": ["no reaction"]
     },
     "withstand": { # Can have portable objects placed onto or into it
         "reactons": ["supports portable"]
@@ -21,15 +17,6 @@ ATTRIBUTES = {
     "usable": {
         "prompts": [["use"]],
         "reactions": ["use _"]
-    },
-    "slippery": {
-        "reactions": ["drop _"]
-    },
-    "poisonous": {
-        "reactions": ["health decrease"]
-    },
-    "heavy": {
-        "reactions": ["movement_speed decrease"]
     },
     "event": {
         "reactions": ["trigger _"] # upon interacting with an item with an event, triggers the item name event to start and progress
@@ -39,24 +26,20 @@ OBJECT_TYPES = {
     "container": ["openable", "withstand"], # implements opeanble, withstand
     "supporter": ["withstand"],
     "food": ["portable", "edible"],
-    "weapon": ["portable", "usable"],
+    "tan_object": ["portable", "usable"],
 }
 ITEMS = {
     "lamp": ["portable"],
     "apple": ["food"], # extends portable
     "chest": ["container"],
     "desk": ["supporter"],
-    "sword": ["weapon"],
-    "phone": ["event"],
-    "human blood": ["event"],
-    "mirror": ["event"],
-    # "notes": ["event"] # Use notes to move plot along
+    "sword": ["tan_object"],
+    "phone": ["event", "tan_object"],
+    "human blood": ["event"], # TODO: Think of what triggers the event. Examine human blood maybe?
+    "mirror": ["event", "tan_object"],
 }
 ROOMS = ["kitchen", "living room", "bedroom", "ballroom", "dining hall", "bathroom", "guest room", "closet", 
         "library", "gym", "theater", "butler's quarters", "spa", "bar", "lab", "office", "parlor", "billard room"]
 OUTSIDE = ["shed", "patio", "garden", "pond", "forest", "pool"]
 LOWER_FLOORS = ["wine celler", "dungeon", "batcave", "cave", "secret room", "why is it damp here", "creepy corner", "a homeless man seems to be living here"]
 
-# Tunnels in batcave
-
-# Transition rooms: stairway, hallway

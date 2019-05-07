@@ -1,9 +1,11 @@
-# Structures the Notes item in game
-# Generates these notes and writes to file
-# And interprets JSON files and reconstruct them as Notes objects
-import json, pprint
+import json, pprint, jsonable
 
-class Notes():
+class Notes(jsonable.Jsonable):
+    """
+    This class is used to represent the notes used to progress the story. It reads and writes these notes to a json file. Inherits from
+    jsonable.
+    """
+
     # Class variable counting number of notes created
     notes_num = 0
 
@@ -22,23 +24,7 @@ class Notes():
             'event': self.event
         }
 
-        with open(path, 'r+') as f:
-            data = json.load(f)
-            data['note ' + str(Notes.notes_num)] = note
-            f.seek(0) 
-            json.dump(data, f)
-    
-    @staticmethod
-    def from_json(path):
-        with open(path, 'r') as f:
-            data = f.read().replace('"', '\"')
-            note = json.loads(data)
-        return note
-
-    @staticmethod
-    def setup(path):
-        with open(path, 'w') as f:
-            json.dump({}, f)
+        super().to_json(path, 'note ' + str(Notes.notes_num), note)
 
 if __name__ == "__main__":
     path = '../content/notes.json'

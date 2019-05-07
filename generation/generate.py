@@ -7,6 +7,7 @@ from queue import *
 from collections import defaultdict
 from world import ATTRIBUTES, OBJECT_TYPES, ITEMS, ROOMS, OUTSIDE, LOWER_FLOORS
 from notes import Notes
+from event import Event
 
 def write_attributes():
     """
@@ -14,7 +15,6 @@ def write_attributes():
     """
     with open_w('../content/attributes.json') as f:
         json.dump(ATTRIBUTES, f)
-
 
 def generate_items(n):
     """Generates n items and writes to ../content/items.json
@@ -33,21 +33,31 @@ def generate_items(n):
     for i in range(n):
         item, properties = random.choice(list(ITEMS.items()))
         # print(item, properties)
+        attributes = []
         for p in properties:
             # TODO: Add random contextual attribute
-            attributes = []
             if p in OBJECT_TYPES.keys():
-                attributes += OBJECT_TYPES[p]
+                attributes.extend(OBJECT_TYPES[p])
             elif p in ATTRIBUTES:
                 attributes.append(p)
 
-            items[item] = attributes
+        items[item] = attributes
     
     # Add notes as items
     path = '../content/notes.json'
     notes = Notes.from_json(path)
     for i in notes.keys():
-        items[i] = ["event"]
+        if i == 'note 2' or i == 'note 4':
+            items[i] = ['event', 'portable']
+        else:
+            items[i] = ['portable']
+
+    # Generate events for all items that have an event attribute
+    path = '../content/events.json'
+    Event.setup(path)
+    for i in list(items.keys()):
+        if 'event' in items[i]:
+            generate_event(i, path)
 
     # Write items to a json file
     with open_w('../content/items.json') as f:
@@ -55,6 +65,23 @@ def generate_items(n):
     
     return items
 
+def generate_event(item, path):
+    """
+    Generates events for items that have the event attribute. Writes these events to a json file.
+    """
+    text, goal, reaction, exit_trigger = None, None, None, None
+    if item == 'note 2':
+        text = 'Monologue: I wonder what he has figured out. Seems interesting though'
+    elif item == 'note 4':
+        text = 'Monologue: What have I gotten myself into...'
+        goal = 'Solve the murder'
+        reaction = 'move key to inventory'
+    elif item == 'mirror':
+        text = 'Am I the murderer?'
+        reaction = 'end game'
+
+    event = Event(item, text, goal, reaction, exit_trigger)
+    event.to_json(path)
 
 def generate_rooms(n, f, items):
     """Generates n rooms and writes to /content/rooms.json 
@@ -106,6 +133,8 @@ def generate_rooms(n, f, items):
 
     print('start', start)
 
+    locked = {}
+
     while not frontier.empty():
         current = frontier.get()
 
@@ -140,7 +169,6 @@ def generate_rooms(n, f, items):
         
         # TODO: Place items in current room based on context
 
-        # print(item)
         rooms[current] = { "directions": adj_rooms, "items": [] }
 
     # Randomly place rest of items
@@ -149,6 +177,10 @@ def generate_rooms(n, f, items):
     for i in items:
         rand_room = random.choice(list(rooms.keys()))
         rooms[rand_room]['items'].append(i)
+
+    # A* to determine path to key. This is to make sure key (note 4) is reachable
+
+    # Randomly choose locked rooms that is not in the path of the key
 
     with open_w('../content/rooms.json') as f:
         json.dump(rooms, f)
@@ -167,6 +199,9 @@ def generate_world(i=5, r=10, f=4):
     generate_rooms(r, f, items)
     
 def generate_notes():
+    """
+    Generates the notes placed in the world used to progress the plot line
+    """
     # TODO: Add variations of core notes, and generate from list
     path = '../content/notes.json'
     Notes.setup(path)
