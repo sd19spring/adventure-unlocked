@@ -2,7 +2,7 @@
 
 Adventure unlocked is a generative parser based text game. It has new music and different interactions for every play through. The user interacts with the game in a terminal-like window where they can type in any command that they would like to explore the world.
 
-TODO: Embed video here
+<video src="https://www.youtube.com/watch?v=94OChRZpU3c&feature=youtu.be" width="320" height="200" controls preload></video>
 
 ## Looks cool, right?
 TODO: Put gameplay videos here.
