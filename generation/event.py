@@ -1,4 +1,5 @@
-import json, jsonable
+import json
+from generation import jsonable
 
 class Event(jsonable.Jsonable):
     """
