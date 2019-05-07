@@ -157,7 +157,6 @@ class Game():
         elif(self.currentRoom.switchRoom(direction) == ""):
             res +="There's no room there!"
         else:
-            res += self.currentRoom.switchRoom(direction)
             self.currentRoom = self.rooms[self.currentRoom.switchRoom(direction)]
             self.currentRoom.discovered = True
         return res
@@ -183,7 +182,7 @@ class Game():
                 break
         return item, command
 
-    def execute_command(self,command, item):
+    def execute_command(self,command, item, notes):
         """Finds the appropriate reaction to command and executes it """
         res = ""
         if self.actions[command] == "move to inventory" :
@@ -197,11 +196,15 @@ class Game():
         elif self.actions[command] == "no reaction":
             res += "Legit Nothing Happens"
         elif self.actions[command] == "examine _":
+            # Record note has been viewed
+            if not item in notes:
+                notes[item] = 1
+
             note = self.notes[item]
-            res += "\n" + item.upper()+ "\n****\n"
+            res += "\n" + item.upper()+ "\n********\n"
             res += note['title'] + "\n"
             res += "Day " + str(note['day']) + '\n'
-            res += note['text'] + "\n*****"
+            res += note['text'] + "\n********\n"
         else:
             res+="Sorry that command doesn't do anything"
         return res
@@ -226,7 +229,7 @@ class Game():
             res += ', '.join(self.attributes[attribute])
             res += '\n'
         return res
-    def handleInput(self, input):
+    def handleInput(self, input, notes):
         """First point of contact for user input. Parses user input resing and
         responds with appropriate reaction
         input: user input
@@ -234,7 +237,9 @@ class Game():
         res = []
         item,command = self.prepare_item(input)
         if(input.casefold().find("go ")>=0):
-            res.append(self.switchRoom(input))
+            s = self.switchRoom(input)
+            if s:
+                res.append(s)
         elif(input.casefold().find("view")>=0):
             if(input.casefold().find("inventory")>=0):
                 res.append(self.player.viewInventory())
@@ -250,11 +255,12 @@ class Game():
         elif not command:
             res.append("You can't do that to this item")
         elif item and command:
-            res.append(self.execute_command(command, item))
+            res.append(self.execute_command(command, item, notes))
         else:
             res.append( "Sorry this action is not supported just yet")
 
-        res.append("You are in: " + self.currentRoom.name)
+        res.append("You are in the " + self.currentRoom.name)
+        res.append("Around you are the following rooms:")
         if self.currentRoom.rooms[0]:
             room = self.currentRoom.rooms[0]
             if self.rooms[room].discovered:
@@ -377,8 +383,8 @@ def startGame():
     notes = load_notes("content/notes.json")
     game = Game(startRoom,rooms,items, attributes, actions, notes)
     res = []
-    res.append("Welcome to Adventure Unlocked ")
-    res.append("You are in: " + game.currentRoom.name)
+    res.append("You are in the " + game.currentRoom.name)
+    res.append("Around you are the following rooms:")
     if game.currentRoom.rooms[0]:
         res.append("North: ?")
     if game.currentRoom.rooms[1]:

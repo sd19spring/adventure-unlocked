@@ -71,10 +71,6 @@ def help_menu(win):
 
     while 1:
         win.fill((0, 0, 0))
-        
-        # help = pygame.image.load("data/images/help.jpg")
-        # win.blit(help, Rect(screen_width / 2 - help.get_rect().width / 2, screen_height / 2 - help.get_rect().height / 2,\
-        #      help.get_rect().width, help.get_rect().height))
 
         # Title 
         title_font = pygame.font.SysFont('helvetica', 75)
@@ -104,3 +100,27 @@ def help_menu(win):
                     return True
 
         pygame.display.update()
+
+def game_end(win, msg):
+    """
+    Renders game end screen
+    """
+
+    while 1:
+        win.fill((0, 0, 0))
+
+        # Title 
+        title_font = pygame.font.SysFont('helvetica', 75)
+        title = title_font.render('Game Over', 1, (255, 255, 255))
+        win.blit(title, (screen_width / 2 - title.get_width() / 2, screen_height / 2 - 50))
+        
+        # Text
+        item_font = pygame.font.SysFont('helvetica', 30)
+        text = item_font.render(msg, 1, (255, 255, 255))
+        win.blit(text, (screen_width / 2 - text.get_width() / 2, screen_height / 2 + 50))
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return False
