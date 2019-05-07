@@ -51,8 +51,8 @@ def main():
     pg.init()
 
     terminal = Terminal()
-    game,startRoom = engine.startGame()
-    terminal.update([startRoom])
+    game,str= engine.startGame()
+    terminal.update([str])
     pg.font.init()
     clock = pg.time.Clock()
 
@@ -105,7 +105,7 @@ def main():
                 if active:
                     if event.key == pg.K_RETURN:
                         terminal.update([text])
-                        terminal.update(engine.handleInput(game, text))
+                        terminal.update(game.handleInput(text))
                         text = ''
 
                     elif event.key == pg.K_BACKSPACE:

@@ -1,1 +1,1 @@
-{"apple": ["portable", "edible"], "human blood": ["event"], "desk": ["withstand"], "lamp": ["portable"], "mirror": ["event", "portable", "usable"], "note 1": ["portable"], "note 2": ["event", "portable"], "note 3": ["portable"], "note 4": ["event", "portable"]}
+{"desk": ["withstand"], "apple": ["portable", "edible"], "sword": ["portable", "usable"], "lamp": ["portable"], "note 1": ["portable"], "note 2": ["event", "portable"], "note 3": ["portable"], "note 4": ["event", "portable"]}

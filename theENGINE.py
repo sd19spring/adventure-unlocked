@@ -37,6 +37,7 @@ class Player():
         if inventory is None:
             inventory = []
         self.inventory = inventory
+        print(type(self.inventory))
         if actions is None:
             actions = []
         self.actions = actions
@@ -141,7 +142,7 @@ class Game():
         if actions is None:
             actions = {}
         self.actions = actions
-        self.currentRoom = rooms["lab"] # TODO Change back to startRoom
+        self.currentRoom = rooms[startRoom] # TODO Change back to startRoom
     def switchRoom(self, direction):
         """Handles room switching at the game level"""
         str = ""
@@ -160,7 +161,11 @@ class Game():
         """
         item = ""
         command = ""
-        for element in self.currentRoom.inventory:
+        items = []
+        print(type(self.player.inventory))
+        items.extend( self.player.inventory)
+        items.extend( self.currentRoom.inventory)
+        for element in items:
             if input.casefold().find(element)>=0:
                 item = element
                 for attribute in self.items[item].properties:
@@ -178,11 +183,11 @@ class Game():
         if self.actions[command] == "move to inventory" :
             self.currentRoom.removeItem(item)
             self.player.addItem(item)
-            str += item + "moved to inventory"
+            str += item + " moved to inventory"
         elif self.actions[command] == "move to placeable" :
             self.player.removeItem(item)
             self.currentRoom.addItem(item)
-            str += item + "removed to Inventory"
+            str += item + " removed from Inventory"
         elif self.actions[command] == "no reaction":
             str += "Legit Nothing Happens"
         elif self.actions[command] == "use _":
@@ -190,6 +195,7 @@ class Game():
             pass
         else:
             str+="Sorry that command doesn't do anything"
+        return str
     def help(self):
         """Displays all possible commands"""
         str= "These are all the recognized commands in Adventured Unlocked\n"
@@ -236,9 +242,10 @@ class Game():
             if(input.casefold().find("inventory")>=0):
                 str.append(self.player.viewInventory())
             else:
-                str.append( game.currentRoom.viewInventory())
+                str.append( self.currentRoom.viewInventory())
 
         elif item and (input.casefold().find("help")>=0):
+            print("here")
             str.append(self.helpitem(item))
         elif (input.casefold().find("help")>=0):
             str.append(self.help())
@@ -251,7 +258,7 @@ class Game():
         else:
             str.append( "Sorry this action is not supported just yet\n\n")
 
-        str.append("You are in: " + game.currentRoom.name + "\n")
+        str.append("You are in: " + self.currentRoom.name + "\n")
         str.append( "What do you do?")
         return str
 
@@ -319,13 +326,16 @@ class MusicThread(threading.Thread):
 
 
 
-def startGame(rooms,startRoom,items, attributes, actions):
+def startGame():
     """
     Method to set up game Object for gameplay and start music thread
     """
     # mythread = MusicThread(name = "Thread-{}".format(1))  # ...Instantiate a thread and pass a unique ID to it
     # mythread.start()
 
+    attributes, actions = load_attibutes("content/attributes.json")
+    items = load_items("content/items.json")
+    rooms, startRoom = load_rooms("content/rooms.json")
     game = Game(startRoom,rooms,items, attributes, actions)
     str = ""
     # str +="Welcome to Adventure Unlocked \n "
@@ -343,9 +353,7 @@ def startGame(rooms,startRoom,items, attributes, actions):
         #     print("Sorry this action is not supported just yet")
 
 if __name__ == '__main__':
-    attributes, actions = load_attibutes("content/attributes.json")
-    items = load_items("content/items.json")
-    rooms, startRoom = load_rooms("content/rooms.json")
+
     game, str = startGame(rooms, startRoom,items, attributes, actions)
     print("Welcome to Adventure Unlocked")
     print("You are in: " + game.currentRoom.name)
