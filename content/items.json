@@ -1,1 +1,1 @@
-{"mirror": ["event"], "chest": ["openable", "withstand"], "apple": ["portable", "edible"], "sword": ["portable", "usable"]}
+{"human blood": ["event"], "apple": ["portable", "edible"], "mirror": ["event"], "chest": ["openable", "withstand"], "phone": ["event"], "note 1": ["event"], "note 2": ["event"], "note 3": ["event"], "note 4": ["event"]}

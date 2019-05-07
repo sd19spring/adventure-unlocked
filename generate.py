@@ -42,6 +42,12 @@ def generate_items(n):
                 attributes.append(p)
 
             items[item] = attributes
+    
+    # Add notes as items
+    path = './content/notes.json'
+    notes = Notes.from_json(path)
+    for i in notes.keys():
+        items[i] = ["event"]
 
     # Write items to a json file
     with open_w('content/items.json') as f:
@@ -100,17 +106,6 @@ def generate_rooms(n, f, items):
 
     print('start', start)
 
-    # BFS generation
-    # TODO: Make sure start room is not locked
-    start = possible_rooms.pop()
-
-    frontier = Queue()
-    frontier.put(start)
-    came_from = {}
-    came_from[start] = None
-
-    print('start', start)
-
     while not frontier.empty():
         current = frontier.get()
 
@@ -143,16 +138,15 @@ def generate_rooms(n, f, items):
                 # idx corresponds to what direction coming from, 0 is north, 1 is east, 2 is south, 3 is west
                 came_from[next] = (idx, current)
         
-        # TODO: Make items placed in rooms contexual, Not enough items? 
-        item = random.sample(list(items.keys()), random.randint(1, len(items)-1))
+        # TODO: Place items in current room based on context
 
-        print(item)
-        rooms[current] = { "directions": adj_rooms, "items": item }
+        # print(item)
+        rooms[current] = { "directions": adj_rooms, "items": [] }
 
-    # Put notes into random rooms
-    path = './content/notes.json'
-    notes = Notes.from_json(path)
-    for i in notes.keys():
+    # Randomly place rest of items (this part may be replaced in the future)
+    items = list(items.keys())
+    random.shuffle(items)
+    for i in items:
         rand_room = random.choice(list(rooms.keys()))
         rooms[rand_room]['items'].append(i)
 
