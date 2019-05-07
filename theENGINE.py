@@ -191,6 +191,7 @@ class Game():
         else:
             str+="Sorry that command doesn't do anything"
     def help(self):
+        """Displays all possible commands"""
         str= "These are all the recognized commands in Adventured Unlocked\n"
         for attribute in self.attributes:
             if not self.attributes[attribute] == []:
@@ -202,6 +203,7 @@ class Game():
         str += "go west"
         return str
     def helpitem(self, item):
+        """Displays all possible commands associated with an item"""
         str = "These are all the way to interact with " + item + "\n"
         for attribute in self.items[item].properties:
             str += ', '.join(self.attributes[attribute])
@@ -220,6 +222,10 @@ class Game():
 
 
     def handleInput(self, input):
+        """First point of contact for user input. Parses user input string and
+        responds with appropriate reaction
+        input: user input
+        """
         str = []
         item,command = self.prepare_item(input)
 
@@ -250,6 +256,7 @@ class Game():
         return str
 
 def load_attibutes(attributeFile):
+    """Loads attributes file"""
     with open(attributeFile, 'r') as file:
         data = file.read().replace('"', '\"')
     adata = json.loads(data)
@@ -264,16 +271,11 @@ def load_attibutes(attributeFile):
                     actions[action] = adata[attribute]['reactions'][i]
             else: #TODO handle non prompts case
                 pass
-# adata[attribute]['prompts']
-    print("\n")
-    print(attributes)
-    print("\n")
-    print(actions)
-    print("\n\n")
     return attributes, actions
 
 
 def load_items(itemsFile):
+    """Loads items file"""
     with open(itemsFile, 'r') as file:
         data = file.read().replace('"', '\"')
     itemsdata = json.loads(data)
@@ -281,9 +283,9 @@ def load_items(itemsFile):
     for item in itemsdata:
         items[item] = Item(item,itemsdata[item])
     return items
-    # return json.loads(data)
 
 def load_rooms(roomsFile):
+    """Loads rooms file"""
     with open(roomsFile, 'r') as file:
         data = file.read().replace('"', '\"')
     roomsdata = json.loads(data)
@@ -292,10 +294,14 @@ def load_rooms(roomsFile):
         if i == 0:
             startRoom = room
         rooms[room] = Room(str(room),roomsdata[room]["directions"],
-        roomsdata[room]["items"], None) #roomsdata[room]["items"]
-
+        roomsdata[room]["items"], None) #roomsdata[room]["locks"]
     return rooms, startRoom
+
 class MusicThread(threading.Thread):
+    """
+    Class to handle creation of music class. Creates a seperate thread to run
+    parallel to game
+    """
     def run(self):
         song = music.Song()
 
@@ -314,6 +320,9 @@ class MusicThread(threading.Thread):
 
 
 def startGame(rooms,startRoom,items, attributes, actions):
+    """
+    Method to set up game Object for gameplay and start music thread
+    """
     # mythread = MusicThread(name = "Thread-{}".format(1))  # ...Instantiate a thread and pass a unique ID to it
     # mythread.start()
 
