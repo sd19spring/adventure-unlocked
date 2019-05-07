@@ -20,6 +20,10 @@ ATTRIBUTES = {
     },
     "event": {
         "reactions": ["trigger _"] # upon interacting with an item with an event, triggers the item name event to start and progress
+    },
+    "readable": {
+        "prompts": [["examine", "read"]],
+        "reactions": ["examine _"]
     }
 }
 OBJECT_TYPES = {

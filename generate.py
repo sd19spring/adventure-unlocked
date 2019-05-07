@@ -48,9 +48,9 @@ def generate_items(n):
     notes = Notes.from_json(path)
     for i in notes.keys():
         if i == 'note 2' or i == 'note 4':
-            items[i] = ['event', 'portable']
+            items[i] = ['event', 'portable', 'readable']
         else:
-            items[i] = ['portable']
+            items[i] = ['portable', 'readable']
 
     # Generate events for all items that have an event attribute
     path = './content/events.json'
