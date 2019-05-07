@@ -13,11 +13,11 @@ The game is a thrilling murder mystery, where you solve a murder. Will there be 
 ### Installation
 
 Adventured unlocked is built with the following dependencies: pygame, and sonic-pi.
-to install pygame:
+To install pygame:
 
     pip install pygame
 
-to install sonic-pi:
+To install sonic-pi:
 
     sudo add-apt-repository ppa:sonic-pi/ppa
     sudo apt-get update
