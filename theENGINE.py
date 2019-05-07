@@ -50,10 +50,11 @@ class Player():
         return res
     def viewInventory(self):
         """ Displays current state of Inventory"""
-        res = "Items Currently in your Inventory ["
-        for item in self.inventory:
-            res += "    \n"+ item
-        res += "\n    ]"
+        res = "Items Currently in your Inventory: "
+        i = ', '.join(self.inventory)
+        if i == '':
+            i = 'None'
+        res += i
         return res
     def removeItem(self, item):
         self.inventory.remove(item)
@@ -93,10 +94,11 @@ class Room():
         return res
     def viewInventory(self):
         """ Displays current state of Inventory"""
-        res = "Items in this room ["
-        for item in self.inventory:
-            res += "\n    "+ item
-        res += "\n]"
+        res = "Items in this room: "
+        i = ', '.join(self.inventory)
+        if i == '':
+            i = 'None'
+        res += i
         return res
     def removeItem(self, item):
         self.inventory.remove(item)

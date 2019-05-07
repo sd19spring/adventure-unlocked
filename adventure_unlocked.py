@@ -68,11 +68,11 @@ def main():
     fontsize = 30
 
     #Screen size
-    X = 640
-    Y = 480
+    # X = 640
+    # Y = 480
 
-    # X = 1280
-    # Y = 720
+    X = 1280
+    Y = 720
 
     #Definiting input box
     input_box = pg.Rect(20, Y-60, 300, fontsize*1.5)
