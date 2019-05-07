@@ -10,11 +10,10 @@ class Notes(jsonable.Jsonable):
     # Class variable counting number of notes created
     notes_num = 0
 
-    def __init__(self, title, day, text, event=None):
+    def __init__(self, title, day, text):
         self.title = title
         self.day = day
         self.text = text
-        self.event = event
         Notes.notes_num += 1
     
     def to_json(self, path):
@@ -22,7 +21,6 @@ class Notes(jsonable.Jsonable):
             'title': self.title,
             'day': self.day,
             'text': self.text,
-            'event': self.event
         }
 
         super().to_json(path, 'note ' + str(Notes.notes_num), note)

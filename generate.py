@@ -184,7 +184,7 @@ def generate_rooms(n, f, items):
     with open_w('./content/rooms.json') as f:
         json.dump(rooms, f)
 
-def generate_world(i=5, r=10, f=4):
+def generate_world(i=len(ITEMS), r=len(ROOMS), f=4):
     """Generates the world environment (items, rooms)
     
     Args:
@@ -204,21 +204,25 @@ def generate_notes():
     # TODO: Add variations of core notes, and generate from list
     path = './content/notes.json'
     Notes.setup(path)
-    note_text = "I’ve finally arrived at [Mansion Name]. I can’t wait to restart my research once again. I think I may finally have the means to complete my grand vision. Only time will tell…"
-    note = Notes('Starting my research', 1, note_text)
-    note.to_json(path)
+    text = ["I’ve finally arrived at the mansion. I can’t wait to restart my research once again. They just didn’t understand my work. Stupid … stupid. I’ll show them, and this time I’m so close. I think I may finally have everything I need. Only time will tell…",
+    "I heard a knock on the front door today. The only thing was that when I went to check, no one was there. It’s probably just my imagination. Also things are looking good, and the experiment seems to be successful. I just need time to examine the results and confirm my hypothesis.",
+    "It’s been a sad three days. Experiment 4 that I thought proved to be a success ended up slowly decaying, and now I have to find somewhere to dispose of it’s carcass. Maybe all of this is not worth it. The academy was right.",
+    "AHHHHHHHHHHHHHHHHHHH!!!! AHHHHHHHHHHH!", "I miss her so much. Sometimes at night, I hallucinate and see her standing outside my window and just watching me. But I know that’s not possible. It’s already been five years since the accident. I just miss her touch so much. She always understood me and my work. Unlike those filthy pigs at the academy.",
+    "I somehow lost Experiment 13. I’m sure last night I strapped it back in, double checking that it was restrained. However, when I went to check today, it wasn’t there anymore. Very strange. What’s even more confusing is it seems that the chains were cleanly cut, but that’s not possible.",
+    "I’ve made a breakthrough! I was just going about it the wrong way. Hehehe, and they said it couldn’t be done. I’m finally so close. *Some fancy formulas that you don’t understand are also written below*",
+    "Happy birthday to me. Happy birthday to me. Happy birthday to meeeeee!", "Someone must have remembered my birthday! I went outside today for the first time in weeks and found Experiment 13’s collar in the mailbox. Maybe it was the milkman.",
+    "I heard another knock on the door today. And once again when I went to check who it was, there wasn’t anybody there. I looked around and checked around the mansion, but still found nothing. I think I’ve been spending too much time in the lab. Doctor did say to get Vitamin D … or was it C? Which one gave you scurvy? I can’t remember.",
+    "Molly appeared in my dream. She was so vivid and realistic, and she came so close to me I could almost count each individual mole on her neck that formed a star. Her silky smooth blonde hair seems just as soft. If only I could feel it against my skin again, oh there’s nothing that I wouldn’t do.",
+    "Molly appeared in my dream once again. It’s two nights in a row, and this time there were two of her. I was so ecstatic I tried running up to both of her, in the dream of course, and I ended up hitting my toe on the nightstand. What confuses me is that I woke up today with a big welt on the same toe I stubbed in my dream. My sleepwalking must be getting worse.",
+    "The doctor prescribed me some medication for my toe. For some reason, every night since that dream, when I wake up in the morning the welt seems to get bigger and hurt even more. So I went to the doctor and he gave me some percocets. That dream made me miss Molly even more. If only I could have an infinite number of Molly’s to be with me and understand me. What was I talking about? Oh yeah, percocets. But Molly... percocets.",
+    "In recent days, I have made more and more breakthroughs, but I feel that someone has been watching me. Whenever I’m in the lab and working on an experiment, I get a feeling that someone is looking over my shoulder. I’m worried it’s those dirty pigs from the academy. They must be after my research especially now that I’m so close to succeeding. But I’ll never let them get a hold of this. Not on my life.",
+    "Someone is after me. I am writing this note in desperation. If you find it, I am likely dead. Whoever reads this, protect my research. That’s all that I care abou- *The writing looks rushed and there is blood on the note. This seems to be the last note.*"]
+    titles = ['Starting my research', 'A knock', 'Failure', '[Untitled]', 'Molly', 'Experiment 13', 'Breakthrough!', 'Happy day', 'A present', 'Another one', 'A dream', 'Some pains', 'Medication', 'Someone is watching…', 'Someone is out to get me…']
+    days = [1, 7, 13, 30, 35, 57, 92, 100, 101, 118, 119, 120, 125, 141, 169]
 
-    note_text = "I have made a recent breakthrough. Manipulating atoms may not be as difficult as previously expected. I can likely use this to create any element that I desire. *Some fancy formulas that you don’t understand are also written*"
-    note = Notes('Breakthrough!', 92, note_text)
-    note.to_json(path)
-
-    note_text = "In recent days, I have made more and more breakthroughs, but I feel that someone has been watching me. I will continue to be wary of those around me."
-    note = Notes('Someone is Watching…', 141, note_text)
-    note.to_json(path)
-
-    note_text = "Someone has found me. I am writing this note in desperation. If you find it, I am likely dead. Find my murderer. Protect my research. *The writing looks rushed and there is blood on the note. A key is taped to the back.*"
-    note = Notes('Someone is out to get me…', 169, note_text)
-    note.to_json(path)
+    for i in range(len(days)):
+        note = Notes(titles[i], days[i], text[i])
+        note.to_json(path)
 
 
 def mkdir(path):

@@ -7,6 +7,7 @@ import random
 import time
 import os
 import theENGINE as engine
+import generate
 
 class Terminal():
     """
@@ -46,6 +47,11 @@ class Terminal():
         return mansion_names[random.randint(0,len(mansion_names)-1)]
 
 def main():
+    # Generate game
+    generate.mkdir('./content')
+    generate.generate_notes()
+    generate.write_attributes()
+    generate.generate_world(r=10)
 
     # Initializing pygame, fonts, and the terminal class
     pg.init()
@@ -64,6 +70,9 @@ def main():
     #Screen size
     X = 640
     Y = 480
+
+    # X = 1280
+    # Y = 720
 
     #Definiting input box
     input_box = pg.Rect(20, Y-60, 300, fontsize*1.5)
