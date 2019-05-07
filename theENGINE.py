@@ -25,13 +25,7 @@ class Item ():
             str += "\n    "+ property
         str += "    ]\n]\n"
         return str
-    def item_input(self, input):
-        """
-        Checks if the users input is a valid interaction and returns the
-        corresponding reaction
-        """
-        for attribute in self.properties:
-            pass
+
 
 class Player():
     """
@@ -66,18 +60,15 @@ class Player():
         self.inventory.remove(item)
     def addItem(self, item):
         self.inventory.append(item)
-    def viewActions(self):
-        """Displays current Actions"""
-        str = "Actions ["
-        for action in self.actions:
-            str += "\n    "+ action
-        str +="\n    ]"
-        return str
-    def updateActions(self, actions):
-        pass
 
 class Room():
-    def __init__(self, name, rooms = None,inventory = None, actions = None):
+    """
+    An Object that is part of the map that the user will explore
+    rooms: other rooms that this room connects to
+    inventory: a list of items in the rooms possession
+    locked: whether paths to other rooms are locked or not
+    """
+    def __init__(self, name, rooms = None, inventory = None, locked = None):
         self.name = name
         if rooms is None:
             rooms = []
@@ -85,9 +76,9 @@ class Room():
         if inventory is None:
             inventory = []
         self.inventory = inventory
-        if actions is None:
-            actions = []
-        self.actions = actions
+        if locked is None:
+            locked = []
+        self.locked = locked
     def __str__(self):
         str = "Player[ Name: "+ name + "\nInventory ["
         for item in self.inventory:
@@ -104,14 +95,15 @@ class Room():
         """ Displays current state of Inventory"""
         str = "Items in this room ["
         for item in self.inventory:
-            str += "    \n"+ item
-        str += "\n    ]"
+            str += "\n    "+ item
+        str += "\n]"
         return str
     def removeItem(self, item):
         self.inventory.remove(item)
     def addItem(self, item):
         self.inventory.append(item)
-    def switchRoom(self, direction):
+    def switchRoom(self, direction): #TODO Update for Locks
+        """Goes to a connected room if room is unlocked"""
         direction = direction.casefold()
         if direction.find("up") > 0 or direction.find("north") > 0:
             direction = 0
@@ -126,39 +118,159 @@ class Room():
         return self.rooms[direction]
 
 class Game():
-    def __init__(self, startRoom, rooms = None):
+    """
+    A class that controls the gameplay. This class handles room changes and
+     other actions
+    startRoom: Room that the player begins in
+    rooms: a Dictionary of all rooms
+    items: a Dictionary of all items
+    attributes: a Dictionary of all attributes
+    actions: a Dictionary of all actions
+    """
+    def __init__(self, startRoom  = "1", rooms = None,items= None, attributes= None, actions= None ):
         self.player = Player()
         if rooms is None:
             rooms = {}
         self.rooms = rooms
-        print(startRoom)
-        self.currentRoom = rooms[startRoom]
-         #TODO Start Room with Rich
+        if items is None:
+            items = {}
+        self.items = items
+        if attributes is None:
+            attributes = {}
+        self.attributes = attributes
+        if actions is None:
+            actions = {}
+        self.actions = actions
+        self.currentRoom = rooms["lab"] # TODO Change back to startRoom
     def switchRoom(self, direction):
+        """Handles room switching at the game level"""
+        str = ""
         if(self.currentRoom.switchRoom(direction) == 0):
-            print("Not a valid Direction. Please try another command.")
+            str += "Not a valid Direction. Please try another command."
         elif(self.currentRoom.switchRoom(direction) == ""):
-            print("There's no room there!")
+            str +="There's no room there!"
         else:
-            print(self.currentRoom.switchRoom(direction))
+            str += self.currentRoom.switchRoom(direction)
             self.currentRoom = self.rooms[self.currentRoom.switchRoom(direction)]
+        return str
+    def prepare_item(self,input):
+        """
+        Checks if an item exists and then if the associated command exists
+        input: String input from user
+        """
+        item = ""
+        command = ""
+        for element in self.currentRoom.inventory:
+            if input.casefold().find(element)>=0:
+                item = element
+                for attribute in self.items[item].properties:
+                    for action in self.attributes[attribute]:
+                        if input.casefold().find(action)>=0:
+                            command = action
+                            break
+
+                break
+        return item, command
+
+    def execute_command(self,command, item):
+        """Finds the appropriate reaction to command and executes it """
+        str = ""
+        if self.actions[command] == "move to inventory" :
+            self.currentRoom.removeItem(item)
+            self.player.addItem(item)
+            str += item + "moved to inventory"
+        elif self.actions[command] == "move to placeable" :
+            self.player.removeItem(item)
+            self.currentRoom.addItem(item)
+            str += item + "removed to Inventory"
+        elif self.actions[command] == "no reaction":
+            str += "Legit Nothing Happens"
+        elif self.actions[command] == "use _":
+            #TODO Interact with doors
+            pass
+        else:
+            str+="Sorry that command doesn't do anything"
+    def help(self):
+        str= "These are all the recognized commands in Adventured Unlocked\n"
+        for attribute in self.attributes:
+            if not self.attributes[attribute] == []:
+                str += ', '.join(self.attributes[attribute])
+                str += '\n'
+        str += "go north\n"
+        str += "go east\n"
+        str += "go south\n"
+        str += "go west"
+        return str
+    def helpitem(self, item):
+        str = "These are all the way to interact with " + item + "\n"
+        for attribute in self.items[item].properties:
+            str += ', '.join(self.attributes[attribute])
+            str += '\n'
+        return str
 
 
+
+
+
+
+
+
+
+
+
+
+    def handleInput(self, input):
+        str = []
+        item,command = self.prepare_item(input)
+
+
+        if(input.casefold().find("go ")>=0):
+            str.append(self.switchRoom(input))
+        elif(input.casefold().find("view")>=0):
+            if(input.casefold().find("inventory")>=0):
+                str.append(self.player.viewInventory())
+            else:
+                str.append( game.currentRoom.viewInventory())
+
+        elif item and (input.casefold().find("help")>=0):
+            str.append(self.helpitem(item))
+        elif (input.casefold().find("help")>=0):
+            str.append(self.help())
+        elif not item:
+            str.append("This item is not in this room")
+        elif not command:
+            str.append("You can't do that to this item")
+        elif item and command:
+            str.append(self.execute_command(command, item))
+        else:
+            str.append( "Sorry this action is not supported just yet\n\n")
+
+        str.append("You are in: " + game.currentRoom.name + "\n")
+        str.append( "What do you do?")
+        return str
 
 def load_attibutes(attributeFile):
     with open(attributeFile, 'r') as file:
         data = file.read().replace('"', '\"')
     adata = json.loads(data)
     attributes = {}
+    actions = {}
     for attribute in adata:
-        print(adata[attribute])
-        for i, actionset in enumerate(adata[attribute]['prompts']):
-            for action in actionset:
-                attributes[action] = adata[attribute]['reactions'][i]
-
-
+        attributes[attribute] = []
+        if 'prompts' in adata[attribute]:
+            for i, actionset in enumerate(adata[attribute]['prompts']):
+                attributes[attribute].extend(actionset)
+                for action in actionset:
+                    actions[action] = adata[attribute]['reactions'][i]
+            else: #TODO handle non prompts case
+                pass
+# adata[attribute]['prompts']
+    print("\n")
     print(attributes)
-    # return attributes
+    print("\n")
+    print(actions)
+    print("\n\n")
+    return attributes, actions
 
 
 def load_items(itemsFile):
@@ -169,7 +281,7 @@ def load_items(itemsFile):
     for item in itemsdata:
         items[item] = Item(item,itemsdata[item])
     return items
-    return json.loads(data)
+    # return json.loads(data)
 
 def load_rooms(roomsFile):
     with open(roomsFile, 'r') as file:
@@ -179,10 +291,10 @@ def load_rooms(roomsFile):
     for i,room in enumerate(roomsdata):
         if i == 0:
             startRoom = room
-            print(type(startRoom))
-        rooms[room] = Room(str(room),roomsdata[room]["directions"], roomsdata[room]["items"], None)
+        rooms[room] = Room(str(room),roomsdata[room]["directions"],
+        roomsdata[room]["items"], None) #roomsdata[room]["items"]
 
-    return startRoom, rooms
+    return rooms, startRoom
 class MusicThread(threading.Thread):
     def run(self):
         song = music.Song()
@@ -199,27 +311,13 @@ class MusicThread(threading.Thread):
 
         song.close_sonicpi()
 
-def handleInput(game, input):
-    str = []
-    if(input.casefold().find("go ")>=0):
-        game.switchRoom(input)
-    elif(input.casefold().find("inventory")>=0):
-        game.player.viewInventory()
-        str.append( game.currentRoom.viewInventory())
-    else:
-        str.append( "Sorry this action is not supported just yet\n\n")
 
-    str.append("You are in: " + game.currentRoom.name + "\n")
-    str.append( "What do you do?")
-    return str
 
-def startGame():
-    mythread = MusicThread(name = "Thread-{}".format(1))  # ...Instantiate a thread and pass a unique ID to it
-    mythread.start()
-    startRoom, rooms = load_rooms("content/rooms.json")
-    game = Game(startRoom, rooms)
-    print("Welcome to Adventure Unlocked")
-    print("You are in: " + game.currentRoom.name)
+def startGame(rooms,startRoom,items, attributes, actions):
+    # mythread = MusicThread(name = "Thread-{}".format(1))  # ...Instantiate a thread and pass a unique ID to it
+    # mythread.start()
+
+    game = Game(startRoom,rooms,items, attributes, actions)
     str = ""
     # str +="Welcome to Adventure Unlocked \n "
     str += "You are in: " + game.currentRoom.name
@@ -236,7 +334,12 @@ def startGame():
         #     print("Sorry this action is not supported just yet")
 
 if __name__ == '__main__':
-    load_attibutes("content/attritubes.json")
-    game, str = startGame()
+    attributes, actions = load_attibutes("content/attributes.json")
+    items = load_items("content/items.json")
+    rooms, startRoom = load_rooms("content/rooms.json")
+    game, str = startGame(rooms, startRoom,items, attributes, actions)
+    print("Welcome to Adventure Unlocked")
+    print("You are in: " + game.currentRoom.name)
     while True:
-        print(handleInput(game,input("")))
+        for stuff in game.handleInput(input("")):
+            print(stuff)
