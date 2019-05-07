@@ -215,7 +215,9 @@ class Game():
         res += "go north\n"
         res += "go east\n"
         res += "go south\n"
-        res += "go west"
+        res += "go west\n"
+        res += "view\n"
+        res += "view inventory"
         return res
     def helpitem(self, item):
         """Displays all possible commands associated with an item"""
@@ -281,12 +283,13 @@ class Game():
         return clean_output(res)
 def clean_output(res):
     out = []
+    wrap_len = 126
     for chunk in res:
         arr =  chunk.split("\n")
         for line in arr:
-            while len(line) > 58:
-                out.append(line[:58])
-                line = line[58:]
+            while len(line) > wrap_len:
+                out.append(line[:wrap_len])
+                line = line[wrap_len:]
             out.append(line)
 
             # out.append("")

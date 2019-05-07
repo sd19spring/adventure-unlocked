@@ -18,13 +18,13 @@ class Terminal():
         self.mansion = self.mansion_name()
         self.text = ['Welcome to Adventure Unlocked','You are a wandering the ' + self.mansion,'Your objective is unclear',
         'Your memories are hazy...','How did you end up here...','Maybe taking a look around will help you remember.',
-        '-------------------------------------------------------------------------',
-        ' ',' ',' ',' ',' ',' ']
+        '-------------------------------------------------------------------------']
 
     def update(self,input):
         for line in input:
-            self.text.pop(0)
             self.text.append(line)
+            if len(self.text) > 20:
+                self.text.pop(0)
 
     def render_multi_line(self,x,y,fsize,screen,font):
         #lines = text.splitlines()
