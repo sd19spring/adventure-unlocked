@@ -73,5 +73,7 @@ In the end, our game is different from the initial idea, but still interesting. 
 
 [TextWorld](https://www.microsoft.com/en-us/research/project/textworld/): an open-source, extensible engine that both generates and simulates text games. Built to train reinforcement learning (RL) agents to learn skills such as language understanding and grounding, combined with sequential decision making, we took inspiraton from their game generation idea.
 
+The mansion image was downloaded from [stickpng.com](http://www.stickpng.com/img/miscellaneous/buildings/haunted-house) 
+
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details

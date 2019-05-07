@@ -8,6 +8,7 @@ import time
 import os
 import theENGINE as engine
 import generate
+from menu import start_menu, help_menu
 
 class Terminal():
     """
@@ -53,8 +54,24 @@ def main():
     generate.write_attributes()
     generate.generate_world(r=10)
 
+    # Set window position
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
+
     # Initializing pygame, fonts, and the terminal class
     pg.init()
+
+    #Screen size
+    X = 1280
+    Y = 720
+
+    # Game window
+    screen = pg.display.set_mode((X, Y))
+    pg.display.set_caption('Adventure Unlocked')
+
+    # Menu
+    if not start_menu(screen):
+        pg.quit()
+        return
 
     terminal = Terminal()
     game,str= engine.startGame()
@@ -67,20 +84,10 @@ def main():
     txtcolor = (0,0,0)
     fontsize = 30
 
-    #Screen size
-    # X = 640
-    # Y = 480
-
-    X = 1280
-    Y = 720
-
     #Definiting input box
     input_box = pg.Rect(20, Y-60, 300, fontsize*1.5)
     color_inactive = pg.Color('lightskyblue3')
     color_active = pg.Color('dodgerblue2')
-
-    screen = pg.display.set_mode((X, Y))
-    pg.display.set_caption('Adventure Unlocked')
 
 
     #Trying to get custom fonts to work
@@ -95,7 +102,6 @@ def main():
     running = True
 
     while running:
-
         #----- Checking for quit sequence and taking in user input -----
         for event in pg.event.get():
             if event.type == pg.QUIT:
